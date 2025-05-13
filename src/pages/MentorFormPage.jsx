@@ -3,7 +3,7 @@ import {
 } from "zmp-ui";
 import { useState } from "react";
 
-function MenteeFormPage() {
+function MentorFormPage() {
     const [form, setForm] = useState({
         name: "",
         phone: "",
@@ -75,4 +75,4 @@ function MenteeFormPage() {
     );
 }
 
-export default MenteeFormPage;
+export default MentorFormPage;

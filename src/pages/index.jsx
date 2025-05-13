@@ -3,23 +3,22 @@ import logo from "../static/image.png";
 import imageCard from "../static/img1.png";
 
 function HomePage() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
   const handleClick = () => {
-    navigate('/DetailPage')
-  }
+    navigate('/DetailPage');
+  };
+
+  const handleRegis = () => {
+    navigate('/Regis');
+  };
+
   return (
-    <div className="h-screen flex flex-col items-center gap-4 p-4 text-white"
-      style={{
-        background: 'linear-gradient(135deg,#262C6E,#3993D9)'
-      }}
-    >
+    <div className="h-screen flex flex-col items-center gap-4 p-4 text-white bg-[linear-gradient(135deg,#262C6E,#3993D9)]">
       <Header
         title="Home"
         backLink={false}
-        className="zmp-header text-white"
-        style={{
-          background: 'linear-gradient(135deg,#3993D9,#262C6E)'
-        }}
+        className="zmp-header text-white bg-[linear-gradient(135deg,#3993D9,#262C6E)]"
       />
 
       {/* Thẻ giới thiệu thành viên */}
@@ -28,13 +27,18 @@ function HomePage() {
         <span className="text-sm font-semibold ml-5">
           Trở thành thành viên BKASim - Mentoring
         </span>
-        <Button text="Đăng nhập" title="Đăng kí ngay" />
+        <Button
+          className="bg-[linear-gradient(135deg,#262C6E,#3993D9)] max-w-[150px]"
+          onClick={handleRegis}
+        >
+          Đăng kí ngay
+        </Button>
       </div>
 
       {/* Thẻ nội dung bài viết */}
       <div
         onClick={handleClick}
-        className="w-[95%] bg-white rounded-lg p-4"
+        className="w-[95%] bg-white rounded-lg p-4 cursor-pointer"
       >
         <img
           src={imageCard}
@@ -43,7 +47,6 @@ function HomePage() {
         />
         <h2 className="text-black mt-2 text-lg font-semibold">Tiêu đề bài viết</h2>
       </div>
-
     </div>
   );
 }

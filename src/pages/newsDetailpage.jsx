@@ -12,13 +12,13 @@ function NewsDetailPage() {
                 className="text-white bg-gradient-to-r from-blue-700 to-blue-500"
             />
 
-            <div className="p-4 flex flex-col gap-3 bg-white">
+            <div className="p-4 pb-20 flex flex-col gap-3 bg-white">
                 {/* Thông tin đầu bài */}
                 <Text size="small" className="text-gray-500">
                     05/02/2025 &nbsp; Bởi longnguyen
                 </Text>
 
-                {/* Hình ảnh minh họa */}
+               
                 <img
                     src="https://cdn.tgdd.vn/Products/Images/42/305659/s16/iphone-15-pro-max-blue-thumbtz-650x650.png"
                     alt="news"
@@ -57,7 +57,7 @@ function NewsDetailPage() {
                 <Button
                     fullWidth
                     type="highlight"
-                    className="mt-4"
+                    className="mt-4 "
                     onClick={() => setOpen(true)}
                 >
                     Chia sẻ

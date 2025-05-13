@@ -22,6 +22,8 @@ import BookingConfirmationPage from "@/pages/bookingComfimPage";
 import BookingDetailPage from "@/pages/bookingDetailPage";
 import NewsDetailPage from "@/pages/newsDetailpage";
 import BottomNav from "./bottomNavigation";
+import Regis from "@/pages/regis";
+import MentorFormPage from "@/pages/MentorFormPage";
 
 const Layout = () => {
   return (
@@ -33,8 +35,11 @@ const Layout = () => {
             <Route path="/SearchPage" element={<SearchPage />}></Route>
             <Route path="/Noticate" element={<Noticate />}></Route>
             <Route path="/Setting" element={<ProfilePage />}></Route>
-            <Route path="/DetailPage" element={<BookingDetailPage />}></Route>
-            <Route path="/Setting" element={<ProfilePage />}></Route>
+            <Route path="/DetailPage" element={<NewsPage />}></Route>
+            <Route path="/Regis" element={<RoleSelectPage />}></Route>
+            <Route path="/mentee" element={<MenteeFormPage />}></Route>
+            <Route path="/mentor" element={<MentorFormPage />}></Route>
+            <Route path="/news-detail" element={<NewsDetailPage />}></Route>
           </AnimationRoutes>
           <BottomNav />
         </ZMPRouter>

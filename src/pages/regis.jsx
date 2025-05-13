@@ -1,7 +1,7 @@
 import { memo } from "react";
 import "../css/regis.css"; // Import your CSS file here
 
-function Regis() {
+function RegisPage() {
 
 
 
@@ -32,4 +32,4 @@ function Regis() {
     )
 }
 
-export default memo(Regis)
+export default memo(RegisPage)

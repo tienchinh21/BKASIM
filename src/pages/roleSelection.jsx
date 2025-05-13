@@ -1,8 +1,15 @@
-import { Page, Header, Box } from "zmp-ui";
-import imageMentee from "../static/img1.png";
+import { Page, Header, Box, useNavigate } from "zmp-ui";
+import imageMentee from "../static/1.png";
 import imageMentor from "../static/2.png";
 
 function RoleSelectPage() {
+    const navigate = useNavigate()
+    const handleMenteeClick = () => {
+        navigate('/mentee')
+    }
+    const handleMentorClick = () => {
+        navigate('/mentor')
+    }
     return (
         <Page
             style={{
@@ -23,6 +30,7 @@ function RoleSelectPage() {
 
 
             <Box
+                onClick={handleMenteeClick}
                 className="mt-20 bg-blue-100 rounded-xl p-4"
                 style={
                     {
@@ -33,7 +41,7 @@ function RoleSelectPage() {
                     }}
             >
                 <img
-                    src={imageMentee}// ảnh minh họa Mentee
+                    src={imageMentee}
                     alt="mentee"
                     style={{ width: '80%', maxWidth: 200, marginBottom: 12 }}
                 />
@@ -58,6 +66,7 @@ function RoleSelectPage() {
             </Box>
 
             <Box
+                onClick={handleMentorClick}
                 className="mt-4 bg-blue-100 rounded-xl p-4"
                 style={{
                     display: 'flex',
