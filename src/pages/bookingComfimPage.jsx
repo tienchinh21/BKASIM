@@ -1,13 +1,14 @@
-import { Page, Header, Text, Button } from "zmp-ui";
+import { Page, Text, Button } from "zmp-ui";
 import img3 from '../static/3.png'
+import Header from "@/components/Header/Header";
+import ButtonApp from "@/components/Button/ButtonApp";
+import useAppNavigation from "@/hooks/useNavigation";
 
 function BookingConfirmationPage() {
+    const { goToDetailBooking } = useAppNavigation();
     return (
         <Page className="bg-white min-h-screen">
-            <Header
-                title="YÊU CẦU ĐƯỢC GỬI ĐẾN MENTOR"
-                backLink={true}
-                className="text-white bg-gradient-to-r from-blue-700 to-blue-500" />
+            <Header title="YÊU CẦU ĐƯỢC GỬI ĐẾN MENTOR" />
 
             <div className="mt-20 p-4 flex flex-col items-center text-center gap-4">
                 {/* Hình minh họa */}
@@ -24,23 +25,8 @@ function BookingConfirmationPage() {
 
                 {/* Nút hành động */}
                 <div className="flex flex-col gap-3 w-full mt-4">
-                    <Button
-                        size="large"
-                        fullWidth
-                        type="highlight"
-                        onClick={() => console.log("Xem đơn đặt lịch")}
-                    >
-                        Xem chi tiết đơn đặt lịch
-                    </Button>
-
-                    <Button
-                        size="large"
-                        fullWidth
-                        variant="tertiary"
-                        onClick={() => console.log("Quay lại trang chủ")}
-                    >
-                        Quay lại Trang chủ
-                    </Button>
+                    <ButtonApp onClick={goToDetailBooking} gradient variant="" title="Xem chi tiết đơn đặt lịch" />
+                    <ButtonApp variant="outline" title=" Quay lại Trang chủ" />
                 </div>
             </div>
         </Page>

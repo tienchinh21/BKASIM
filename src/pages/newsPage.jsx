@@ -1,49 +1,66 @@
-import { Page, Header, Input, Text } from "zmp-ui";
-import { useNavigate } from "zmp-ui";
+import AppHeader from "@/components/Header/Header";
+import NewsCard from "@/components/News/NewsCard";
+import useAppNavigation from "@/hooks/useNavigation";
+import { useState } from "react";
+import images from "@/assets/images";
 
-const newsList = Array.from({ length: 5 }, (_, i) => ({
-    id: i,
-    title: "Hãng Công Nghệ X Ra Mắt Điện Thoại Mới Với Công Nghệ AI Tích Hợp",
-    description: "Hãng công nghệ X vừa chính thức giới thiệu mẫu điện thoại thông minh mới với chip xử lý AI mạnh mẽ...",
-    date: "05/02/2024",
-    image: "https://cdn.tgdd.vn/Products/Images/42/305659/s16/iphone-15-pro-max-blue-thumbtz-650x650.png",
-}));
+export default function NewsPage() {
+    const { goToNewsDetailPage } = useAppNavigation();
 
-function NewsPage() {
-    const navigate = useNavigate();
+    // Danh sách danh mục có id và label
+    const categories = [
+        { id: "all", label: "Tất cả" },
+        { id: "cat1", label: "Danh mục 1" },
+        { id: "cat2", label: "Danh mục 2" },
+    ];
 
-    const handleClick = (id) => {
-        navigate("/news-detail"); // có thể truyền ID nếu cần: `/news-detail/${id}`
-    };
+    // Chọn mặc định là "Tất cả"
+    const [activeCategory, setActiveCategory] = useState("all");
 
     return (
-        <Page className="bg-white min-h-screen">
-            <Header title="TIN TỨC" backLink={true} className="text-white bg-gradient-to-r from-blue-700 to-blue-500" />
+        <div className="h-screen flex flex-col">
+            <AppHeader title="TIN TỨC" />
 
-            <div className="p-4">
-                <Input placeholder="Tìm kiếm nhanh" className="mb-4" />
+            <div className="flex-1 overflow-y-auto bg-white">
+                {/* Tabs danh mục */}
+                <div className="flex overflow-x-auto px-4 gap-4 py-2 bg-white border-b">
+                    {categories.map((cat) => (
+                        <button
+                            key={cat.id}
+                            onClick={() => setActiveCategory(cat.id)}
+                            className={`text-sm whitespace-nowrap ${activeCategory === cat.id
+                                    ? "text-blue-600 font-semibold"
+                                    : "text-gray-500"
+                                }`}
+                        >
+                            {cat.label}
+                        </button>
+                    ))}
+                </div>
 
-                {newsList.map((item) => (
-                    <div
-                        key={item.id}
-                        onClick={() => handleClick(item.id)}
-                        className="flex gap-3 mb-4 cursor-pointer bg-white rounded-lg shadow-sm p-2"
-                    >
-                        <img
-                            src={item.image}
-                            alt="news-thumb"
-                            className="w-[90px] h-[90px] object-cover rounded-md"
+                {/* Search bar */}
+                <div className="px-4 py-2 bg-white">
+                    <input
+                        type="text"
+                        placeholder="Tìm kiếm nhanh"
+                        className="w-full border rounded px-3 py-2 text-sm"
+                    />
+                </div>
+
+                {/* Danh sách bài viết */}
+                <div className="px-4 space-y-4 pb-6">
+                    {[...Array(15)].map((_, idx) => (
+                        <NewsCard
+                            key={idx}
+                            image={images.post1}
+                            date="05/03/2024"
+                            title="Hãng Công Nghệ X Ra Mắt Điện Thoại Mới Với Công Nghệ AI Tích Hợp"
+                            summary="Hãng công nghệ X vừa chính thức giới thiệu mẫu điện thoại mới nhất..."
+                            onClick={() => goToNewsDetailPage()}
                         />
-                        <div className="flex flex-col justify-between">
-                            <Text size="small" className="text-gray-500">{item.date}</Text>
-                            <Text className="font-semibold text-black line-clamp-2">{item.title}</Text>
-                            <Text size="small" className="text-gray-600 line-clamp-2">{item.description}</Text>
-                        </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
             </div>
-        </Page>
+        </div>
     );
 }
-
-export default NewsPage;

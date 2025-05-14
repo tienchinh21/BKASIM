@@ -1,76 +1,70 @@
-import { Page, Header, Box, Text, Button } from "zmp-ui";
+import Header from "@/components/Header/Header";
+import ButtonApp from "@/components/Button/ButtonApp";
 
-function BookingDetailPage() {
+export default function BookingDetail() {
+    const booking = {
+        code: "#Abcd35qj",
+        name: "Tên khách hàng A",
+        time: "15:00–15/01/2025",
+        dateCreated: "13/01/2025",
+        status: "Chờ xác nhận",
+        topic: "Tôi muốn tư vấn dịch vụ SMS Brandname",
+        description: "Tôi muốn tư vấn dịch vụ SMS Brandname",
+    };
+
     return (
-        <Page className="bg-[#D6D6D6] min-h-screen">
-            <Header
-                title="CHI TIẾT ĐẶT LỊCH"
-                backLink={true}
-                className="text-white bg-gradient-to-r from-blue-700 to-blue-500"
-            />
+        <div className="min-h-screen bg-gray-100 pb-6">
+            <Header title="Chi tiết đặt lịch" />
 
-            <div className=" py-4 flex flex-col gap-4">
+            <div className="px-4 pt-4 space-y-4">
 
-                <Box className="mt-20 bg-white  p-4 shadow">
-                    <div className="flex justify-between items-center mb-2">
-                        <Text bold>Thông tin đặt lịch</Text>
-                        <Text
-                            style={{ background: "#D6D6D6", padding: 4, borderRadius: 4 }}
-                            size="small"
-                            className="text-gray-500">
-                            Ngày tạo 13/01/2025
-                        </Text>
+                <div className="bg-white rounded shadow px-4 py-3">
+                    <div className="flex justify-between items-start mb-1">
+                        <p className="text-sm text-gray-800">
+                            Mã đặt lịch: <b>{booking.code}</b>
+                        </p>
+                        <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
+                            Ngày tạo: {booking.dateCreated}
+                        </span>
                     </div>
+                    <p className="text-sm text-gray-800">
+                        Người đặt: <b>{booking.name}</b>
+                    </p>
+                    <p className="text-sm text-gray-800">
+                        Thời gian đặt: {booking.time}
+                    </p>
+                    <p className="text-sm">
+                        Trạng thái:{" "}
+                        <span className="text-orange-500 font-medium">{booking.status}</span>
+                    </p>
+                </div>
 
-                    <Text size="small">
-                        <b>Mã đặt lịch:</b> <span className="text-blue-600">#Abcd35gj</span>
-                    </Text>
-                    <Text size="small">
-                        <b>Người đặt lịch:</b> Tên khách hàng A
-                    </Text>
-                    <Text size="small">
-                        <b>Thời gian đặt lịch:</b> 15:00 - 15/01/2025
-                    </Text>
-                    <Text size="small">
-                        <b>Trạng thái:</b>{" "}
-                        <span className="text-red-500 font-medium">Chờ xác nhận</span>
-                    </Text>
-                </Box>
 
-                {/* Chủ đề */}
-                <Box className="bg-white p-4 shadow">
-                    <Text bold className="mb-1">Chủ đề</Text>
-                    {/* <Textarea
-                        readOnly
-                        value="Tôi muốn tư vấn dịch vụ SMS Brandname"
-                        className="bg-[#f0f5ff]"
-                    /> */}
-                </Box>
+                <div className="bg-white rounded shadow px-4 py-3">
+                    <p className="text-sm font-semibold mb-2">Chủ đề</p>
+                    <div className="text-sm text-gray-800 border border-gray-300 rounded p-2 bg-white">
+                        {booking.topic}
+                    </div>
+                </div>
 
-                {/* Mô tả */}
-                <Box className="bg-white p-4 shadow">
-                    <Text bold className="mb-1">Mô tả</Text>
-                    {/* <Textarea
-                        readOnly
-                        value="Tôi muốn tư vấn dịch vụ SMS Brandname"
-                        className="bg-[#f0f5ff]"
-                    /> */}
-                </Box>
 
-                {/* Nút huỷ */}
-                <div className="mt-4">
-                    <Button
-                        fullWidth
-                        variant="secondary"
-                        className="text-red-500 border border-red-400"
-                        onClick={() => console.log("Huỷ lịch")}
-                    >
-                        Huỷ đặt lịch
-                    </Button>
+                <div className="bg-white rounded shadow px-4 py-3">
+                    <p className="text-sm font-semibold mb-2">Mô tả</p>
+                    <div className="text-sm text-gray-800 border border-gray-300 rounded p-2 bg-white">
+                        {booking.description}
+                    </div>
                 </div>
             </div>
-        </Page>
+
+
+            <div className="px-4 pt-6">
+                <ButtonApp
+                    title="Huỷ đặt lịch"
+                    variant="outline"
+                    fullWidth
+                    rounded
+                />
+            </div>
+        </div>
     );
 }
-
-export default BookingDetailPage;

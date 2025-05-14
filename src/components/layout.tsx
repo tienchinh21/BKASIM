@@ -1,4 +1,4 @@
-import { getSystemInfo } from "zmp-sdk";
+import { lazy, Suspense } from "react";
 import {
   AnimationRoutes,
   App,
@@ -6,45 +6,59 @@ import {
   SnackbarProvider,
   ZMPRouter,
 } from "zmp-ui";
+import { getSystemInfo } from "zmp-sdk";
 import { AppProps } from "zmp-ui/app";
-
-
-import HomePage from "@/pages/index";
-import Noticate from "@/pages/noticate";
-import MenteeFormPage from "@/pages/MenteeFormPage";
-import NewsPage from "@/pages/newsPage";
-
-import Editprofile from "@/pages/editprofile";
-import RoleSelectPage from "@/pages/roleSelection";
-import SearchPage from "@/pages/search";
-import ProfilePage from "@/pages/profilePage";
-import BookingConfirmationPage from "@/pages/bookingComfimPage";
-import BookingDetailPage from "@/pages/bookingDetailPage";
-import NewsDetailPage from "@/pages/newsDetailpage";
 import BottomNav from "./bottomNavigation";
-import Regis from "@/pages/regis";
-import MentorFormPage from "@/pages/MentorFormPage";
+import BookingMentoring from "@/pages/BookingMentoring";
+import EditProfilePage from "@/pages/editprofile";
+
+const HomePage = lazy(() => import("@/pages"));
+const SearchPage = lazy(() => import("@/pages/search"));
+const NotificationPage = lazy(() => import("@/pages/noticate"));
+const ProfilePage = lazy(() => import("@/pages/profilePage"));
+const NewsPage = lazy(() => import("@/pages/newsPage"));
+const SelectRolePage = lazy(() => import("@/pages/roleSelection"));
+const MenteeFormPage = lazy(() => import("@/pages/MenteeFormPage"));
+const MentorFormPage = lazy(() => import("@/pages/MentorFormPage"));
+const NewsDetailPage = lazy(() => import("@/pages/newsDetailpage"));
+const BookingConfirmationPage = lazy(() => import("@/pages/bookingComfimPage"));
+const BookingDetailPage = lazy(() => import("@/pages/bookingDetailPage"));
+const Regis = lazy(() => import("@/pages/regis"));
 
 const Layout = () => {
+
+  const visiblePaths = ["/", "/SearchPage", "/Noticate", "/Setting"];
+  const currentPath = window.history?.state?.path || "/";
+  const showBottomNav = visiblePaths.includes(currentPath);
+
   return (
     <App theme={getSystemInfo().zaloTheme as AppProps["theme"]}>
       <SnackbarProvider>
         <ZMPRouter>
-          <AnimationRoutes>
-            <Route path="/" element={<HomePage />}></Route>
-            <Route path="/SearchPage" element={<SearchPage />}></Route>
-            <Route path="/Noticate" element={<Noticate />}></Route>
-            <Route path="/Setting" element={<ProfilePage />}></Route>
-            <Route path="/DetailPage" element={<NewsPage />}></Route>
-            <Route path="/Regis" element={<RoleSelectPage />}></Route>
-            <Route path="/mentee" element={<MenteeFormPage />}></Route>
-            <Route path="/mentor" element={<MentorFormPage />}></Route>
-            <Route path="/news-detail" element={<NewsDetailPage />}></Route>
-          </AnimationRoutes>
+          <Suspense fallback={<div className="text-center p-4">Đang tải...</div>}>
+            <AnimationRoutes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/SearchPage" element={<SearchPage />} />
+              <Route path="/Noticate" element={<NotificationPage />} />
+              <Route path="/Setting" element={<ProfilePage />} />
+              <Route path="/newsPost" element={<NewsPage />} />
+              <Route path="/Regis" element={<SelectRolePage />} />
+              <Route path="/mentee" element={<MenteeFormPage />} />
+              <Route path="/mentor" element={<MentorFormPage />} />
+              <Route path="/news-detail" element={<NewsDetailPage />} />
+              <Route path="/Booking" element={<BookingMentoring />} />
+              <Route path="/booking-detail" element={<BookingDetailPage />} />
+              <Route path="/booking-confirm" element={<BookingConfirmationPage />} />
+              <Route path="/regis" element={<Regis />} />
+              <Route path="/editprofile" element={<EditProfilePage />} />
+            </AnimationRoutes>
+          </Suspense>
+
           <BottomNav />
         </ZMPRouter>
       </SnackbarProvider>
     </App>
   );
 };
+
 export default Layout;

@@ -1,78 +1,79 @@
-import {
-    Page, Header, Input, Button, Text
-} from "zmp-ui";
 import { useState } from "react";
+import Header from "@/components/Header/Header";
+import FormInput from "@/components/Form/FormInput";
+import SectionTitle from "@/components/Form/SectionTitle";
+import FormFooterButton from "@/components/Footer/FormFooterButton";
+import ZaloConsentModal from "@/components/Modal/ZaloConsentModal";
 
-function MentorFormPage() {
-    const [form, setForm] = useState({
-        name: "",
-        phone: "",
-        email: "",
-        dob: "",
-        gender: "",
-        company: "",
-        position: "",
-    });
+export default function MentorFormPage() {
+    const [gender, setGender] = useState("");
+    const [showModal, setShowModal] = useState(false);
 
-    const handleChange = (field) => (e) => {
-        setForm({ ...form, [field]: e.target.value });
+    const handleSubmit = () => {
+        alert("Gửi thành công!");
+    };
+
+    const handleFocusPhone = () => {
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+    };
+
+    const handleConfirmModal = () => {
+        setShowModal(false);
+        console.log("Cho phép truy cập thông tin Zalo");
     };
 
     return (
-        <Page
-            style={{ background: 'linear-gradient(135deg,#262C6E , #3993D9)' }}
-            className="bg-gradient-to-b from-blue-700 to-blue-500 min-h-screen">
-            <Header
-                title="ĐĂNG KÝ"
-                backLink={true}
-                style={{ background: 'linear-gradient(135deg, #3993D9, #262C6E )' }}
-                className="text-white" />
+        <div className="h-screen overflow-hidden flex flex-col bg-gradient-to-b from-[#1E1A85] to-[#3498db] text-white">
+            <Header title="Đăng Ký" />
 
-            <div className="mt-20 px-4 py-3 text-white">
-                {/* <Title size="medium" className="text-center">Trở thành Mentee</Title> */}
-                <Text className="text-center mb-4">Trở thành Mentor</Text>
-                <Text className="text-center mb-4">Nhập thông tin của bạn</Text>
+            <div className="flex-1 overflow-y-auto px-4 pt-6 pb-6">
+                <h2 className="text-center text-lg font-semibold mb-1">Trở thành Mentee</h2>
+                <p className="text-center text-sm mb-6">Nhập thông tin của bạn</p>
 
-                {/* Thông tin cá nhân */}
-                <div className=" rounded-xl p-4 text-black mb-4">
-                    <Text className="text-white" bold>Thông tin cá nhân</Text>
+                <SectionTitle title="Thông tin cá nhân" />
+                <FormInput label="Họ và tên" required placeholder="Nguyễn Văn A" />
+                <FormInput
+                    label="Số điện thoại người nhận"
+                    required
+                    placeholder="0933209346"
+                    type="tel"
+                    onFocus={handleFocusPhone}
+                />
+                <FormInput label="Email" placeholder="Nhập địa chỉ email" type="email" />
+                <FormInput label="Ngày sinh" type="date" />
 
-                    <Input label="Họ và tên" value={form.name} onChange={handleChange("name")} />
-                    <Input label="Số điện thoại" type="tel" value={form.phone} onChange={handleChange("phone")} />
-                    <Input label="Email" type="email" value={form.email} onChange={handleChange("email")} />
-                    <Input label="Ngày sinh" type="date" value={form.dob} onChange={handleChange("dob")} />
-
-                    <label className="block mt-2 mb-1 text-sm">Giới tính</label>
+                <div className="mb-4">
+                    <label className="block mb-1 text-sm">Giới tính</label>
                     <select
-                        value={form.gender}
-                        onChange={handleChange("gender")}
-                        className="w-full p-2 border rounded-lg"
+                        className="w-full px-4 py-2 rounded bg-white text-black focus:outline-none"
+                        value={gender}
+                        onChange={(e) => setGender(e.target.value)}
                     >
                         <option value="">Chọn giới tính</option>
-                        <option value="male">Nam</option>
-                        <option value="female">Nữ</option>
-                        <option value="other">Khác</option>
+                        <option value="Nam">Nam</option>
+                        <option value="Nữ">Nữ</option>
+                        <option value="Khác">Khác</option>
                     </select>
                 </div>
 
-                {/* Thông tin doanh nghiệp */}
-                <div className=" rounded-xl p-4 text-black">
-                    <Text className="text-white" bold>Thông tin doanh nghiệp</Text>
-                    <Input label="Tên công ty" value={form.company} onChange={handleChange("company")} />
-                    <Input label="Chức vụ" value={form.position} onChange={handleChange("position")} />
-                </div>
-
-                <Button
-                    className="mt-6"
-                    fullWidth
-                    type="highlight"
-                    onClick={() => console.log("Dữ liệu đã nhập:", form)}
-                >
-                    Xác nhận
-                </Button>
+                <SectionTitle title="Thông tin doanh nghiệp" />
+                <FormInput label="Tên công ty" placeholder="Nhập tên công ty" />
+                <FormInput label="Chức vụ" placeholder="Nhập chức vụ" />
             </div>
-        </Page>
+
+            <FormFooterButton onClick={handleSubmit} />
+
+            <ZaloConsentModal
+                isOpen={showModal}
+                onClose={handleCloseModal}
+                onConfirm={handleConfirmModal}
+                name="Nguyễn Văn A"
+                phone="0933209346"
+            />
+        </div>
     );
 }
-
-export default MentorFormPage;

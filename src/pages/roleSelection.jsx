@@ -1,111 +1,40 @@
-import { Page, Header, Box, useNavigate } from "zmp-ui";
-import imageMentee from "../static/1.png";
-import imageMentor from "../static/2.png";
+import AppHeader from "@/components/Header/Header"
+import RoleCard from "@/components/Card/RoleCard";
+import useAppNavigation from "@/hooks/useNavigation";
+import images from "@/assets/images";
 
-function RoleSelectPage() {
-    const navigate = useNavigate()
-    const handleMenteeClick = () => {
-        navigate('/mentee')
-    }
-    const handleMentorClick = () => {
-        navigate('/mentor')
-    }
+export default function SelectRolePage() {
+    const { goBack, goToMentee, goToMentor } = useAppNavigation();
+
     return (
-        <Page
-            style={{
-                background: 'linear-gradient(135deg,#262C6E,#3993D9 )',
-                padding: 16
-            }}>
+        <div className="h-screen flex flex-col">
+            <AppHeader title="ĐĂNG KÝ" />
 
-            <Header
-                title="ĐĂNG KÝ"
-                backLink={true}
-                className="text-black"
-                style={{ background: 'linear-gradient(135deg, #3993D9, #262C6E )' }} />
+            <div className="flex-1 overflow-y-auto bg-gradient-to-b from-[#1E1A85] to-[#3498db] px-4 pb-8 pt-2">
+                <div className="text-white font-semibold text-lg text-center mt-6 mb-4">
+                    Bạn muốn trở thành<br />Mentee hay Mentor?
+                </div>
 
-            <div style={{ textAlign: 'center', color: 'white', marginTop: 16 }}>
-                <h5 style={{ color: 'white' }}>Bạn muốn trở thành mentee hay mentor?</h5>
-            </div>
-
-
-
-            <Box
-                onClick={handleMenteeClick}
-                className="mt-20 bg-blue-100 rounded-xl p-4"
-                style={
-                    {
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        backgroundColor: '#3993D9'
-                    }}
-            >
-                <img
-                    src={imageMentee}
-                    alt="mentee"
-                    style={{ width: '80%', maxWidth: 200, marginBottom: 12 }}
+                <RoleCard
+                    onClick={goToMentee}
+                    title="Mentee"
+                    description="Cựu sinh viên, Sinh viên có khát vọng phát triển bản thân, xây dựng sự nghiệp, tạo giá trị cho cộng đồng"
+                    image={images.mentee}
                 />
-                <h3
-                    style={{
-                        color: 'white',
-                        fontSize: 24,
-                        fontWeight: 'bold',
-                        textAlign: 'center',
-                        marginBottom: 8
-                    }} >Mentee</h3>
-                <span
-                    style={{
-                        color: 'white',
-                        fontSize: 12,
-                        fontWeight: '500',
-                        textAlign: 'center',
-                        marginBottom: 8
-                    }}>
-                    Cựu sinh viên, sinh viên có khao khát phát triển bản thân, khởi nghiệp hoặc gia nhập thị trường lao động.
-                </span>
-            </Box>
 
-            <Box
-                onClick={handleMentorClick}
-                className="mt-4 bg-blue-100 rounded-xl p-4"
-                style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    backgroundColor: '#3993D9'
-                }}
-            >
-                <img
-                    src={imageMentor} // ảnh minh họa Mentor
-                    alt="mentor"
-                    style={{ width: '80%', maxWidth: 200, marginBottom: 12 }}
+                <RoleCard
+                    onClick={goToMentor}
+                    title="Mentor"
+                    description="Anh/chị cựu sinh viên có kinh nghiệm và quản trị, điều hành doanh nghiệp"
+                    image={images.mentor}
                 />
-                <h3
-                    style={{
-                        color: 'white',
-                        fontSize: 24,
-                        fontWeight: 'bold',
-                        textAlign: 'center',
-                        marginBottom: 8
-                    }} >Mentee</h3>
-                <span
-                    style={{
-                        color: 'white',
-                        fontSize: 12,
-                        fontWeight: '500',
-                        textAlign: 'center',
-                        marginBottom: 8
-                    }}>
-                    Anh/chị cựu sinh viên có kinh nghiệm về quản trị & điều hành doanh nghiệp
-                </span>
 
-            </Box>
-
-            <div style={{ textAlign: 'center', marginTop: 24 }}>
-                <span> Trở về</span>
+                <div className="flex justify-center mt-4">
+                    <button onClick={goBack} className="bg-white text-blue-600 rounded-full p-3 shadow">
+                        ⬅️ Quay lại
+                    </button>
+                </div>
             </div>
-        </Page>
+        </div>
     );
 }
-
-export default RoleSelectPage;

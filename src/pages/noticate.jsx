@@ -1,60 +1,34 @@
-import {
-  Page, Header, Box, Text, Button
-} from "zmp-ui";
+import HeaderApp from "@/components/Header/Header";
+import NotificationItem from "@/components/Notice/NoticeItem";
 
-const notifications = [
-  {
-    id: 1,
-    message: "Đặt lịch của bạn đã được chấp nhận",
-    timestamp: "12:46, 16/03/2025",
-    action: "Xem chi tiết",
-  },
-  {
-    id: 2,
-    message: "Đã tiến hành gửi thông báo ZNS huỷ lịch",
-    timestamp: "12:46, 16/03/2025",
-    action: null,
-  },
-];
+export default function NotificationPage() {
+  const notifications = [
+    {
+      message: "Đặt lịch của bạn đã được chấp nhận",
+      time: "12:46, 16/03/2025",
+      buttonText: "Xem chi tiết",
+    },
+    {
+      message: "Đã tiến hành gửi thông báo ZNS huỷ lịch",
+      time: "12:46, 16/03/2025",
+    },
+  ];
 
-function NotificationPage() {
   return (
-    <Page
-    style={{background: 'linear-gradient(135deg,#262C6E, #3993D9)',}}
-     className="bg-gradient-to-b from-blue-700 to-blue-500 min-h-screen">
-      <Header
-        title="THÔNG BÁO"
-        backLink={true}
-        className="text-white"
-        style={{ background: 'linear-gradient(135deg,#3993D9, #262C6E )', }} />
+    <div className="min-h-screen bg-gradient-to-b from-[#1E1A85] to-[#3498db]">
+      <HeaderApp title="THÔNG BÁO" />
 
-      <div className=" mt-20 px-4 py-2">
+      <div className="px-4 pt-4 pb-20">
         {notifications.map((item, index) => (
-          <Box
-            key={item.id}
-            className={`bg-white p-4 mb-2 rounded-lg ${index < notifications.length - 1 ? 'border-b border-gray-300' : ''
-              }`}
-          >
-            <Text className="font-medium text-black">{item.message}</Text>
-            <div className="flex justify-between items-center mt-2">
-              <Text size="small" className="text-gray-500">
-                {item.timestamp}
-              </Text>
-              {item.action && (
-                <Button
-                  size="small"
-                  variant="tertiary"
-                  className="border text-primary"
-                >
-                  {item.action}
-                </Button>
-              )}
-            </div>
-          </Box>
+          <NotificationItem
+            key={index}
+            message={item.message}
+            time={item.time}
+            buttonText={item.buttonText}
+            onClick={() => alert("Đi đến chi tiết")}
+          />
         ))}
       </div>
-    </Page>
+    </div>
   );
 }
-
-export default NotificationPage;

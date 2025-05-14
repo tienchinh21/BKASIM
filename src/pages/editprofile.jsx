@@ -1,44 +1,86 @@
-import { Page, Header, Input, Title, Box, Avatar } from "zmp-ui";
+import Header from "@/components/Header/Header";
+import FormInput from "@/components/Form/FormInput";
+import ButtonApp from "@/components/Button/ButtonApp";
+import { useState } from "react";
 
-function EditProfilePage() {
-  return (
-    <Page className="bg-gradient-to-b from-blue-700 to-blue-500" style={{ padding: 16 }}>
+export default function EditProfilePage() {
+    const [gender, setGender] = useState("");
+    const [mbti, setMbti] = useState("");
 
-      <Header title="THÔNG TIN CÁ NHÂN" backLink={true} className="text-white" />
+    return (
+        <div className="min-h-screen bg-gradient-to-b from-[#1E1A85] to-[#3498db] text-white pb-20">
+            <Header title="Chỉnh sửa thông tin" />
 
-      <div style={{ display: 'flex', justifyContent: 'center', marginTop: 16 }}>
-        <div style={{
-          borderRadius: '50%',
-          padding: 4,
-          background: 'linear-gradient(to bottom right, #ffb347, #1e90ff)',
-        }}>
-          <Avatar
-            size={96}
-            // src="https://randomuser.me/api/portraits/women/44.jpg" // bạn thay bằng ảnh thật
-            alt="avatar"
-          />
+            <div className="flex justify-center mt-4">
+                <div className="relative">
+                    <img
+                        src="https://i.pravatar.cc/120"
+                        className="w-24 h-24 rounded-full border-4 border-white shadow-lg"
+                        alt="avatar"
+                    />
+                </div>
+            </div>
+
+            <div className="px-4 pt-4 space-y-6">
+                {/* Thông tin cá nhân */}
+                <div className="bg-white rounded-xl p-4 text-black space-y-3 shadow">
+                    <h3 className="text-sm font-semibold text-[#1E1A85]">Thông tin cá nhân</h3>
+                    <FormInput label="Họ và tên" placeholder="Nguyễn Văn A" required />
+                    <FormInput label="Số điện thoại" placeholder="0933209346" required />
+                    <FormInput label="Email" type="email" placeholder="nguyenvana@gmail.com" />
+
+                    {/* Dropdown giới tính */}
+                    <div>
+                        <label className="text-sm text-black font-medium mb-1 block">Giới tính</label>
+                        <select
+                            className="w-full px-3 py-2 rounded border border-gray-300 text-sm text-black"
+                            value={gender}
+                            onChange={(e) => setGender(e.target.value)}
+                        >
+                            <option value="">Chọn giới tính</option>
+                            <option>Nam</option>
+                            <option>Nữ</option>
+                            <option>Khác</option>
+                        </select>
+                    </div>
+
+                    {/* Dropdown MBTI */}
+                    <div>
+                        <label className="text-sm text-black font-medium mb-1 block">MBTI/DISC</label>
+                        <select
+                            className="w-full px-3 py-2 rounded border border-gray-300 text-sm text-black"
+                            value={mbti}
+                            onChange={(e) => setMbti(e.target.value)}
+                        >
+                            <option value="">Chọn kết quả MBTI/DISC</option>
+                            <option>INTJ</option>
+                            <option>ENFP</option>
+                            <option>DISC - D</option>
+                            <option>DISC - I</option>
+                            <option>DISC - S</option>
+                            <option>DISC - C</option>
+                        </select>
+                    </div>
+                </div>
+
+                {/* Thông tin doanh nghiệp */}
+                <div className="bg-white rounded-xl p-4 text-black space-y-3 shadow">
+                    <h3 className="text-sm font-semibold text-[#1E1A85]">Thông tin doanh nghiệp</h3>
+                    <FormInput label="Tên công ty" placeholder="Công ty Cổ phần ABC" />
+                    <FormInput label="Chức vụ" placeholder="Giám đốc điều hành" />
+                    <FormInput label="Kinh nghiệm" placeholder="10 năm kinh nghiệm" />
+                </div>
+
+                {/* Nút lưu */}
+                <ButtonApp
+                    title="Lưu"
+                    fullWidth
+                    gradient
+                    rounded
+                    size="lg"
+                    onClick={() => alert("Lưu thông tin thành công")}
+                />
+            </div>
         </div>
-      </div>
-
-      {/* Thông tin cá nhân */}
-      <Box className="mt-4 bg-white rounded-xl p-4">
-        {/* <Title size="small">Thông tin cá nhân</Title> */}
-        <Input label="Họ và tên" value="Nguyễn Thị B" readOnly />
-        <Input label="Email" value="nguyenthib@gmail.com" readOnly />
-        <Input label="Ngày sinh" value="01/07/2000" readOnly />
-        <Input label="MBTI/DISC" value="ASRM" readOnly />
-      </Box>
-
-      {/* Thông tin thêm */}
-      <Box className="mt-4 bg-white rounded-xl p-4">
-        <Title size="small">Thông tin thêm</Title>
-        <Input label="Tên công ty/trường" value="Công ty Cổ phần ABC" readOnly />
-        <Input label="Chức vụ" value="Nhân viên" readOnly />
-        <Input label="Kinh nghiệm" value="5 Năm kinh nghiệm" readOnly />
-      </Box>
-
-    </Page>
-  );
+    );
 }
-
-export default EditProfilePage;
