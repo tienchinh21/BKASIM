@@ -10,7 +10,7 @@ import BookingCard from "@/components/Card/BookingCard";
 const tabs = ["Lịch hẹn mới", "Lịch sử"];
 
 export default function BookingMentoring() {
-    const { goToConfirm  , goToDetailBooking} = useAppNavigation();
+    const { goToConfirm, goToDetailBooking } = useAppNavigation();
     const [activeTab, setActiveTab] = useState("Lịch hẹn mới");
 
     const bookings = [
@@ -22,8 +22,6 @@ export default function BookingMentoring() {
 
     return (
         <div className="min-h-screen bg-white pb-10 text-black">
-            <Header title="Đặt Lịch Mentoring" />
-
 
             <div className="flex border-b px-4 pt-4">
                 {tabs.map(tab => (
@@ -87,7 +85,7 @@ export default function BookingMentoring() {
 
                     {/* Danh sách lịch sử */}
                     {bookings.map((b, i) => (
-                        <BookingCard onClick={goToDetailBooking}key={i} booking={b} />
+                        <BookingCard onClick={goToDetailBooking} key={i} booking={b} />
                     ))}
                 </div>
             )}

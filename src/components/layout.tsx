@@ -11,6 +11,7 @@ import { AppProps } from "zmp-ui/app";
 import BottomNav from "./bottomNavigation";
 import BookingMentoring from "@/pages/BookingMentoring";
 import EditProfilePage from "@/pages/editprofile";
+import Header from "./Header/Header";
 
 const HomePage = lazy(() => import("@/pages"));
 const SearchPage = lazy(() => import("@/pages/search"));
@@ -35,6 +36,7 @@ const Layout = () => {
     <App theme={getSystemInfo().zaloTheme as AppProps["theme"]}>
       <SnackbarProvider>
         <ZMPRouter>
+          <Header title="Title" />
           <Suspense fallback={<div className="text-center p-4">Đang tải...</div>}>
             <AnimationRoutes>
               <Route path="/" element={<HomePage />} />

@@ -9,8 +9,6 @@ export default function ProfilePage() {
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-[#1E1A85] to-[#3498db] pb-10 text-white">
-            <Header title="Cá nhân" />
-
             <div className="px-4 pt-4 space-y-4">
                 {/* Thông tin người dùng */}
                 <button

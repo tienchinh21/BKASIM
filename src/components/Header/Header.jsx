@@ -1,12 +1,18 @@
 import { memo } from "react";
 import { FiX, FiMoreHorizontal } from "react-icons/fi";
 import useAppNavigation from "@/hooks/useNavigation";
+import { useLocation } from "zmp-ui";
+import { useNavigate } from "react-router";
 
-function AppHeader({ title = "", logo = null }) {
+function AppHeader({ logo = null }) {
+    const location = useLocation()
+    const navigate = useNavigate()
+    const title = location.pathname.slice(1);
+
     const { goBack, goHome } = useAppNavigation();
 
     return (
-        <div className="relative bg-gradient-to-b from-[#1E1A85] to-[#3498db] px-4 py-4 flex items-center justify-between text-white">
+        <div className=" w-full bg-gradient-to-b from-[#1E1A85] to-[#3498db] px-4 py-4 flex items-center justify-between text-white">
             {/* Nút quay lại hình tròn trắng */}
             <button
                 onClick={goBack}

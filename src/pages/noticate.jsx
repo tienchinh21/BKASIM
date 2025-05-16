@@ -16,7 +16,6 @@ export default function NotificationPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#1E1A85] to-[#3498db]">
-      <HeaderApp title="THÔNG BÁO" />
 
       <div className="px-4 pt-4 pb-20">
         {notifications.map((item, index) => (

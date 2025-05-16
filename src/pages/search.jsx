@@ -8,7 +8,6 @@ export default function SearchPage() {
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-[#1E1A85] to-[#3498db] pb-16">
-            <AppHeader title="TÌM KIẾM" />
 
             <SearchFilterBar
                 onSearch={(val) => console.log("Search:", val)}

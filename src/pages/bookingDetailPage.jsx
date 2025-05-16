@@ -14,7 +14,6 @@ export default function BookingDetail() {
 
     return (
         <div className="min-h-screen bg-gray-100 pb-6">
-            <Header title="Chi tiết đặt lịch" />
 
             <div className="px-4 pt-4 space-y-4">
 
