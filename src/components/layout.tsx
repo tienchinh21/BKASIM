@@ -11,12 +11,12 @@ import { AppProps } from "zmp-ui/app";
 
 import Header from "./Header/Header";
 import BottomNav from "./bottomNavigation";
+import NotificationPage from "@/pages/noticate";
+import HomePage from "@/pages";
+import SearchPage from "@/pages/search";
+import ProfilePage from "@/pages/profilePage";
+import BookingMentoring from "@/pages/BookingMentoring";
 
-// Lazy load pages
-const HomePage = lazy(() => import("@/pages"));
-const SearchPage = lazy(() => import("@/pages/search"));
-const NotificationPage = lazy(() => import("@/pages/noticate"));
-const ProfilePage = lazy(() => import("@/pages/profilePage"));
 const NewsPage = lazy(() => import("@/pages/newsPage"));
 const SelectRolePage = lazy(() => import("@/pages/roleSelection"));
 const MenteeFormPage = lazy(() => import("@/pages/MenteeFormPage"));
@@ -25,7 +25,6 @@ const NewsDetailPage = lazy(() => import("@/pages/newsDetailpage"));
 const BookingConfirmationPage = lazy(() => import("@/pages/bookingComfimPage"));
 const BookingDetailPage = lazy(() => import("@/pages/bookingDetailPage"));
 const Regis = lazy(() => import("@/pages/regis"));
-const BookingMentoring = lazy(() => import("@/pages/BookingMentoring"));
 const EditProfilePage = lazy(() => import("@/pages/editprofile"));
 
 const Layout = () => {
@@ -42,7 +41,7 @@ const Layout = () => {
             {/* Nội dung chính */}
             <div className="flex-1 overflow-y-auto">
               <Suspense fallback={<div className="text-center p-4">Đang tải...</div>}>
-                <AnimationRoutes>
+                <AnimationRoutes >
                   <Route path="/" element={<HomePage />} />
                   <Route path="/SearchPage" element={<SearchPage />} />
                   <Route path="/Noticate" element={<NotificationPage />} />

@@ -4,6 +4,7 @@ import FormInput from "@/components/Form/FormInput";
 import SectionTitle from "@/components/Form/SectionTitle";
 import FormFooterButton from "@/components/Footer/FormFooterButton";
 import ZaloConsentModal from "@/components/Modal/ZaloConsentModal";
+import Container from "@/components/Container/Container";
 
 export default function MentorFormPage() {
     const [gender, setGender] = useState("");
@@ -27,9 +28,7 @@ export default function MentorFormPage() {
     };
 
     return (
-        <div className="h-screen overflow-hidden flex flex-col bg-gradient-to-b from-[#1E1A85] to-[#3498db] text-white">
-            <Header title="Đăng Ký" />
-
+        <Container>
             <div className="flex-1 overflow-y-auto px-4 pt-6 pb-6">
                 <h2 className="text-center text-lg font-semibold mb-1">Trở thành Mentee</h2>
                 <p className="text-center text-sm mb-6">Nhập thông tin của bạn</p>
@@ -65,7 +64,7 @@ export default function MentorFormPage() {
                 <FormInput label="Chức vụ" placeholder="Nhập chức vụ" />
             </div>
 
-            <FormFooterButton onClick={handleSubmit} />
+            {/* <FormFooterButton onClick={handleSubmit} /> */}
 
             <ZaloConsentModal
                 isOpen={showModal}
@@ -74,6 +73,7 @@ export default function MentorFormPage() {
                 name="Nguyễn Văn A"
                 phone="0933209346"
             />
-        </div>
+        </Container>
+
     );
 }
