@@ -3,22 +3,29 @@ import { FiX, FiMoreHorizontal } from "react-icons/fi";
 import useAppNavigation from "@/hooks/useNavigation";
 import { useLocation } from "zmp-ui";
 import { useNavigate } from "react-router";
+import images from "@/assets/images";
 
 function AppHeader({ logo = null }) {
-    const location = useLocation()
-    const navigate = useNavigate()
-    const title = location.pathname.slice(1);
+    const location = useLocation();
+    const navigate = useNavigate();
 
     const { goBack, goHome } = useAppNavigation();
 
+    const isHome = location.pathname === "/";
+
+    const title = location.pathname
+        .slice(1)
+        .replace(/-/g, " ")
+        .replace(/\b\w/g, (c) => c.toUpperCase());
+
     return (
-        <div className=" w-full bg-gradient-to-b from-[#1E1A85] to-[#3498db] px-4 py-4 flex items-center justify-between text-white">
-            {/* Nút quay lại hình tròn trắng */}
+        <div className="relative bg-gradient-to-b from-[#1E1A85] to-[#3498db] h-full px-4 py-4 flex items-center justify-between text-white">
+
+
             <button
                 onClick={goBack}
                 className="w-9 h-9 rounded-full bg-white flex items-center justify-center shadow-md"
             >
-                {/* Icon SVG mũi tên trái màu xanh đậm (#1E1A85) */}
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="w-4 h-4"
@@ -31,16 +38,16 @@ function AppHeader({ logo = null }) {
                 </svg>
             </button>
 
-            {/* Tiêu đề căn giữa tuyệt đối */}
+          
             <div className="absolute left-1/2 transform -translate-x-1/2 text-sm font-semibold text-center uppercase">
-                {logo ? (
-                    <img src={logo} alt="logo" className="h-10 object-contain mx-auto" />
+                {isHome ? (
+                    <img src={images.logo} alt="logo" className="h-10 object-contain mx-auto" />
                 ) : (
                     title
                 )}
             </div>
 
-            {/* Cụm nút bên phải (menu & đóng) */}
+
             <div className="flex items-center space-x-2">
                 <button className="p-1">
                     <FiMoreHorizontal size={18} />

@@ -1,5 +1,6 @@
 import images from "@/assets/images";
 import ButtonApp from "@/components/Button/ButtonApp";
+import Container from "@/components/Container/Container";
 import Header from "@/components/Header/Header";
 import useAppNavigation from "@/hooks/useNavigation";
 import { Icon } from "zmp-ui"; // hoặc dùng react-icons nếu zmp-ui lỗi
@@ -8,9 +9,9 @@ export default function ProfilePage() {
     const { goToEditProfile, goToMbtiTest } = useAppNavigation();
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-[#1E1A85] to-[#3498db] pb-10 text-white">
+        <Container>
             <div className="px-4 pt-4 space-y-4">
-                {/* Thông tin người dùng */}
+
                 <button
                     onClick={goToEditProfile}
                     className="bg-white text-black rounded w-full flex items-center justify-between px-4 py-3 shadow cursor-pointer hover:bg-gray-100 transition"
@@ -26,11 +27,11 @@ export default function ProfilePage() {
 
                     <div className="w-6 h-6 flex items-center justify-center text-blue-600">
                         <Icon icon="zi-edit" className="text-lg" />
-                        {/* Nếu icon không hiện: dùng <FiEdit3 size={18} /> từ react-icons */}
+
                     </div>
                 </button>
 
-                {/* Box MBTI / DISC Test */}
+
                 <div className="bg-white text-black rounded px-4 py-3 shadow flex items-center justify-between hover:bg-gray-100 transition">
                     <div className="flex items-center gap-3">
                         <img
@@ -52,6 +53,6 @@ export default function ProfilePage() {
                     />
                 </div>
             </div>
-        </div>
+        </Container>
     );
 }

@@ -3,13 +3,12 @@ import img3 from '../static/3.png'
 import Header from "@/components/Header/Header";
 import ButtonApp from "@/components/Button/ButtonApp";
 import useAppNavigation from "@/hooks/useNavigation";
+import Container from "@/components/Container/Container";
 
 function BookingConfirmationPage() {
     const { goToDetailBooking } = useAppNavigation();
     return (
-        <Page className="bg-white min-h-screen">
-            <Header title="YÊU CẦU ĐƯỢC GỬI ĐẾN MENTOR" />
-
+        <Container className="h-[900px]">
             <div className="mt-20 p-4 flex flex-col items-center text-center gap-4">
                 {/* Hình minh họa */}
                 <img
@@ -29,7 +28,8 @@ function BookingConfirmationPage() {
                     <ButtonApp variant="outline" title=" Quay lại Trang chủ" />
                 </div>
             </div>
-        </Page>
+        </Container>
+
     );
 }
 

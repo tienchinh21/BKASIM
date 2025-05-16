@@ -7,19 +7,18 @@ import images from "@/assets/images";
 export default function NewsPage() {
     const { goToNewsDetailPage } = useAppNavigation();
 
-    // Danh sách danh mục có id và label
+
     const categories = [
         { id: "all", label: "Tất cả" },
         { id: "cat1", label: "Danh mục 1" },
         { id: "cat2", label: "Danh mục 2" },
     ];
 
-    // Chọn mặc định là "Tất cả"
+
     const [activeCategory, setActiveCategory] = useState("all");
 
     return (
         <div className="h-screen flex flex-col">
-            <AppHeader title="TIN TỨC" />
 
             <div className="flex-1 overflow-y-auto bg-white">
                 {/* Tabs danh mục */}
@@ -29,8 +28,8 @@ export default function NewsPage() {
                             key={cat.id}
                             onClick={() => setActiveCategory(cat.id)}
                             className={`text-sm whitespace-nowrap ${activeCategory === cat.id
-                                    ? "text-blue-600 font-semibold"
-                                    : "text-gray-500"
+                                ? "text-blue-600 font-semibold"
+                                : "text-gray-500"
                                 }`}
                         >
                             {cat.label}

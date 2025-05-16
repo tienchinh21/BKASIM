@@ -13,7 +13,6 @@ export default function NewsDetailPage() {
 
     return (
         <div className="h-screen flex flex-col">
-            <AppHeader title="CHI TIẾT TIN TỨC" />
 
             <div className="flex-1 overflow-y-auto bg-white">
                 <NewsDetailContent

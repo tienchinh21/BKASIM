@@ -6,6 +6,7 @@ import Header from "@/components/Header/Header";
 import useAppNavigation from "@/hooks/useNavigation";
 import { useState } from "react";
 import BookingCard from "@/components/Card/BookingCard";
+import Container from "@/components/Container/Container";
 
 const tabs = ["Lịch hẹn mới", "Lịch sử"];
 
@@ -21,8 +22,8 @@ export default function BookingMentoring() {
     ];
 
     return (
-        <div className="min-h-screen bg-white pb-10 text-black">
 
+        <Container bg="light">
             <div className="flex border-b px-4 pt-4">
                 {tabs.map(tab => (
                     <button
@@ -68,7 +69,7 @@ export default function BookingMentoring() {
                 </div>
             ) : (
                 <div className="px-4 pt-4 space-y-4">
-                    {/* Bộ lọc */}
+                   
                     <div className="space-y-2">
                         <div className="flex gap-2">
                             <input type="date" className="w-full border border-gray-300 rounded px-2 py-1 text-sm" />
@@ -83,12 +84,13 @@ export default function BookingMentoring() {
                         </select>
                     </div>
 
-                    {/* Danh sách lịch sử */}
+                   
                     {bookings.map((b, i) => (
                         <BookingCard onClick={goToDetailBooking} key={i} booking={b} />
                     ))}
                 </div>
             )}
-        </div>
+        </Container>
+
     );
 }
