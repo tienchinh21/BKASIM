@@ -61,7 +61,7 @@ const Layout = () => {
             </div>
 
             {/* BottomNav cố định */}
-            <div className="flex-none h-[60px]">
+            <div >
               <BottomNav />
             </div>
           </div>

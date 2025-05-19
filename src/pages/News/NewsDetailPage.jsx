@@ -24,8 +24,8 @@ export default function NewsDetailPage() {
                 />
             </div>
 
-            <div className="p-4 bg-white border-t">
-                <ButtonApp size="md" title="Chia sẻ" onClick={() => alert("Chia sẻ!")} />
+            <div className="p-4 w-full bg-white border-t">
+                <ButtonApp fullWidth='true' size="lg" title="Chia sẻ" onClick={() => alert("Chia sẻ!")} />
             </div>
         </div>
     );

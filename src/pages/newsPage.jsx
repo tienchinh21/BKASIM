@@ -7,19 +7,16 @@ import images from "@/assets/images";
 export default function NewsPage() {
     const { goToNewsDetailPage } = useAppNavigation();
 
-
     const categories = [
         { id: "all", label: "Tất cả" },
         { id: "cat1", label: "Danh mục 1" },
         { id: "cat2", label: "Danh mục 2" },
     ];
 
-
     const [activeCategory, setActiveCategory] = useState("all");
 
     return (
-        <div className="h-screen flex flex-col">
-
+        <div className="flex flex-col flex-1"> 
             <div className="flex-1 overflow-y-auto bg-white">
                 {/* Tabs danh mục */}
                 <div className="flex overflow-x-auto px-4 gap-4 py-2 bg-white border-b">
@@ -47,7 +44,7 @@ export default function NewsPage() {
                 </div>
 
                 {/* Danh sách bài viết */}
-                <div className="px-4 space-y-4 pb-6">
+                <div className="px-4 space-y-4 pb-4">
                     {[...Array(15)].map((_, idx) => (
                         <NewsCard
                             key={idx}
