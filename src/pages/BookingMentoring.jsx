@@ -40,10 +40,12 @@ export default function BookingMentoring() {
         }
         setIsCompleted(true);
         setCurrentStep(steps.length);
+
+
     };
 
     const handleChangeStep =()=>{
-        
+        console.log('hhhjj')
     }
 
     return (
