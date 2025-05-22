@@ -1,4 +1,3 @@
-// BookingMentoring.jsx
 import StepperItem from "@/components/Form/StepperItem";
 import FormInput from "@/components/Form/FormInput";
 import ButtonApp from "@/components/Button/ButtonApp";
@@ -12,7 +11,14 @@ const tabs = ["Lịch hẹn mới", "Lịch sử"];
 
 export default function BookingMentoring() {
     const { goToConfirm, goToDetailBooking } = useAppNavigation();
+    const [currentStep, setCurrentStep] = useState(0);
     const [activeTab, setActiveTab] = useState("Lịch hẹn mới");
+    const [isCompleted, setIsCompleted] = useState(false);
+    const [formData, setFormData] = useState({
+        subject: "",
+        time: "",
+        confirmNote: "",
+    });
 
     const bookings = [
         { code: "#Abcd35qj", name: "Tên khách hàng A", time: "15:00-15/01/2025", status: "Chờ xác nhận", date: "13/01/2025" },
@@ -21,8 +27,26 @@ export default function BookingMentoring() {
         { code: "#Abcd35qj", name: "Tên khách hàng A", time: "15:00-15/01/2025", status: "Đã huỷ", date: "13/01/2025" },
     ];
 
-    return (
+    const steps = [
+        { label: "Nhập chủ đề" },
+        { label: "Nhập thời gian" },
+        { label: "Xác nhận thông tin" },
+    ];
 
+    const handleComplete = () => {
+        if (!formData.subject.trim() || !formData.time.trim() || !formData.confirmNote.trim()) {
+            alert("Vui lòng điền đầy đủ thông tin.");
+            return;
+        }
+        setIsCompleted(true);
+        setCurrentStep(steps.length);
+    };
+
+    const handleChangeStep =()=>{
+        
+    }
+
+    return (
         <Container bg="light">
             <div className="flex border-b px-4 pt-4">
                 {tabs.map(tab => (
@@ -37,39 +61,53 @@ export default function BookingMentoring() {
             </div>
 
             {activeTab === "Lịch hẹn mới" ? (
-                <div className="pt-5 space-y-6 px-4">
-                    <StepperItem step={1} label="Nhập chủ đề">
-                        <FormInput placeholder="Nhập chủ đề" icon="zi-pen" />
-                    </StepperItem>
-
-                    <StepperItem step={2} label="Nhập mô tả">
-                        <FormInput placeholder="Nhập mô tả" icon="zi-pen" />
-                    </StepperItem>
-
-                    <StepperItem step={3} label="Chọn ngày giờ" required>
-                        <button className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-gray-100 text-left text-sm text-gray-700 shadow-sm">
-                            Xem thời gian đặt lịch
-                        </button>
-                    </StepperItem>
-
-                    <p className="text-xs text-gray-500 leading-relaxed">
-                        Quý khách sẽ nhận được thông báo Zalo thông tin đặt lịch. Nhân viên sẽ liên hệ lại nếu có thay đổi.
-                    </p>
-
-                    <div className="pt-2">
-                        <ButtonApp
-                            title="Chốt Đặt lịch"
-                            fullWidth
-                            rounded
-                            gradient
-                            size="lg"
-                            onClick={goToConfirm}
+                <div className="pt-5 px-4">
+                    {steps.map((step, index) => (
+                        <StepperItem
+                            key={index}
+                            label={step.label}
+                            isActive={!isCompleted && index === currentStep}
+                            isDone={isCompleted || index < currentStep}
+                            disabled={isCompleted}
+                            onClick={() => setCurrentStep(index)}
                         />
+                    ))}
+
+                    <div className="flex  flex-row ">
+
+                        <div className="relative flex flex-col items-start ml-[8px]">
+                            {
+                                !isCompleted ? (<div> <div className="w-[2px] h-[70px] bg-gray-300"></div>
+                                    <div className="w-8 h-[2px] bg-gray-300 ml-[2px]"></div></div>) :
+                                    (<div>
+                                        <div className="w-[2px] h-[70px] bg-[#3993D9]"></div>
+                                        <div className="w-8 h-[2px] bg-[#3993D9]"></div>
+                                    </div>)
+                            }
+
+                        </div>
+
+                        <div className="flex flex-col">
+                            <p className="text-xs text-gray-500 leading-relaxed mb-5">
+                                Quý khách sẽ nhận được thông báo Zalo thông tin đặt lịch, nhân viên sẽ liên lạc lại Quý khách qua SĐT nếu thông tin đặt lịch có sự thay đổi
+                            </p>
+                            <div className="">
+                                <ButtonApp
+                                    title="Chốt Đặt lịch"
+                                    fullWidth
+                                    rounded
+                                    gradient
+                                    size="md"
+                                    onClick={handleComplete}
+                                />
+                            </div>
+                        </div>
+
                     </div>
+
                 </div>
             ) : (
                 <div className="px-4 pt-4 space-y-4">
-                   
                     <div className="space-y-2">
                         <div className="flex gap-2">
                             <input type="date" className="w-full border border-gray-300 rounded px-2 py-1 text-sm" />
@@ -84,13 +122,11 @@ export default function BookingMentoring() {
                         </select>
                     </div>
 
-                   
                     {bookings.map((b, i) => (
                         <BookingCard onClick={goToDetailBooking} key={i} booking={b} />
                     ))}
                 </div>
             )}
         </Container>
-
     );
 }

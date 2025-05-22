@@ -34,7 +34,7 @@ const Layout = () => {
         <ZMPRouter>
           <div className="flex flex-col h-screen overflow-hidden">
             {/* Header cố định */}
-            <div className="flex-none h-[56px]">
+            <div className="flex-none h-[88px]">
               <Header />
             </div>
 
@@ -60,7 +60,6 @@ const Layout = () => {
               </Suspense>
             </div>
 
-            {/* BottomNav cố định */}
             <div >
               <BottomNav />
             </div>

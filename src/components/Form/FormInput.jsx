@@ -9,7 +9,7 @@ export default function FormInput({
     ...rest
 }) {
     return (
-        <div className="mb-3">
+        <div className="mb-2">
             {label && (
                 <label className="text-white text-sm font-medium mb-1 block">
                     {label} {required && <span className="text-red-500">*</span>}

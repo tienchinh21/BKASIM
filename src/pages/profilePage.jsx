@@ -10,7 +10,7 @@ export default function ProfilePage() {
 
     return (
         <Container>
-            <div className="px-4 pt-4 space-y-4">
+            <div className=" pt-2 space-y-4">
 
                 <button
                     onClick={goToEditProfile}
@@ -41,14 +41,14 @@ export default function ProfilePage() {
                         />
                         <div>
                             <p className="text-sm font-semibold">Trắc nghiệm tính cách</p>
-                            <p className="text-xs text-gray-500">Test MBTI/DISC</p>
+                            <p className="text-sm text-gray-500">Test MBTI/DISC</p>
                         </div>
                     </div>
                     <ButtonApp
                         title="Thực hiện bài test"
                         size="sm"
                         gradient
-                        rounded
+
                         onClick={goToMbtiTest}
                     />
                 </div>

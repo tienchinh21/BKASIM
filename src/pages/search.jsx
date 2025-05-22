@@ -51,13 +51,13 @@ export default function SearchPage() {
                 </button>
             </div>
 
-            {/* Danh sách hoặc loading */}
+
             {loading ? (
                 <div className="flex justify-center py-8">
                     <div className="w-6 h-6 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
                 </div>
             ) : (
-                <div className="bg-white mt-2 mx-4 rounded-lg overflow-hidden">
+                <div className="bg-white mt-2 rounded-lg overflow-hidden">
                     {users.length > 0 ? (
                         users.map((user, idx) => (
                             <UserCard

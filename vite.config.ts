@@ -10,7 +10,21 @@ export default () => {
     },
     root: "./src",
     base: "",
-    plugins: [react()],
+    plugins: [
+      react(),
+      {
+        name: "override-config",
+        config: () => ({
+          build: {
+            target: "esnext"
+          }
+        })
+      }
+
+    ],
+    esbuild: {
+      target: 'esnext',
+    },
     resolve: {
       alias: {
         "@": "/src",

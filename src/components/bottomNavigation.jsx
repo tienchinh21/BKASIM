@@ -29,7 +29,7 @@ export default function BottomNav() {
     if (isHidden) return null;
 
     return (
-        <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-md flex justify-around py-2 z-50 flex-none h-[60px]">
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-md flex justify-around py-2 z-50 flex-none h-[80px]">
             {navItems.map((item) => {
                 const isActive = location.pathname === item.path;
                 return (
