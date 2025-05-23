@@ -13,12 +13,29 @@ const Blog = sequelize.define('Blog', {
         type: DataTypes.STRING,
         allowNull: false
     },
-    description: DataTypes.TEXT,
-    summary: DataTypes.STRING,
-    img: DataTypes.STRING,
-    userId: {
-        type: DataTypes.UUID,
+    summary: {
+        type: DataTypes.STRING,
         allowNull: false
+    },
+    content: {
+        type: DataTypes.TEXT,
+        allowNull: false
+    },
+    image: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    status: {
+        type: DataTypes.STRING,
+        defaultValue: 'draft'
+    },
+    authorId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        references: {
+            model: 'users',
+            key: 'id'
+        }
     },
     categoryId: {
         type: DataTypes.UUID,
@@ -28,8 +45,8 @@ const Blog = sequelize.define('Blog', {
     tableName: 'blogs',
 });
 
-Blog.belongsTo(User, { foreignKey: 'userId', as: 'author' });
-User.hasMany(Blog, { foreignKey: 'userId', as: 'blogs' });
+Blog.belongsTo(User, { foreignKey: 'authorId', as: 'author' });
+User.hasMany(Blog, { foreignKey: 'authorId', as: 'blogs' });
 
 Blog.belongsTo(Category, { foreignKey: 'categoryId', as: 'category' });
 Category.hasMany(Blog, { foreignKey: 'categoryId', as: 'blogs' });

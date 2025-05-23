@@ -6,11 +6,12 @@ const router = require('./router/index');
 const app = express();
 
 
-require('./model/user');
-require('./model/role');
-require('./model/Blog');
-require('./model/Appointment');
-require('./model/Category');
+// require('./model/user');
+// require('./model/role');
+// require('./model/Blog');
+// require('./model/Category');
+// require('./model/Follow');
+
 
 app.use(cors());
 app.use(express.json());
@@ -28,7 +29,11 @@ const swaggerOptions = {
                 email: 'tienchinh21.it@gmail.com'
             }
         },
-        servers: [{ url: 'http://localhost:3000' }],
+        servers: [
+            {
+                url: 'http://localhost:3000'
+            }
+        ],
         components: {
             securitySchemes: {
                 bearerAuth: {
@@ -37,11 +42,16 @@ const swaggerOptions = {
                     bearerFormat: 'JWT'
                 }
             }
-        }
+        },
+        security: [
+            {
+                bearerAuth: []
+            }
+        ]
     },
-    apis: ['./src/router/*.js']
-
+    apis: ['./src/router/*.js'] // Sửa lại path đúng với folder route của bạn
 };
+
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));

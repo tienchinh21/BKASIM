@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const roleController = require('../controller/roleController');
-
+const checkAdmin = require('../middleware/checkAdmin');
 /**
  * @swagger
  * /roles:
  *   post:
  *     summary: Create a new role
- *     tags: [Roles]
+ *     tags: [Role]
  *     requestBody:
  *       required: true
  *       content:
@@ -28,6 +28,73 @@ const roleController = require('../controller/roleController');
  *       409:
  *         description: Role already exists
  */
-router.post('/', roleController.createRoleCtr);
+router.post('/roles', checkAdmin, roleController.createRoleCtr);
+
+/**
+ * @swagger
+ * /roles:
+ *   get:
+ *     summary: Get all roles
+ *     tags: [Role]
+ *     responses:
+ *       200:
+ *         description: List of roles
+ *       500:
+ *         description: Server error
+ */
+router.get('/roles', checkAdmin, roleController.getAllRolesCtr);
+
+/**
+ * @swagger
+ * /roles/{roleId}:
+ *   delete:
+ *     summary: Delete a role by ID
+ *     tags: [Role]
+ *     parameters:
+ *       - name: roleId
+ *         in: path
+ *         required: true
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: Role deleted successfully
+ *       404:
+ *         description: Role not found
+ *       500:
+ *         description: Server error
+ */
+router.delete('/roles/:roleId', checkAdmin, roleController.deleteRoleCtr);
+
+/**
+ * @swagger
+ * /roles/{roleId}:
+ *   put:
+ *     summary: Update a role by ID
+ *     tags: [Role]
+ *     parameters:
+ *       - name: roleId
+ *         in: path
+ *         required: true
+ *         type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: MENTOR
+ *     responses:
+ *       200:
+ *         description: Role updated successfully
+ *       404:
+ *         description: Role not found
+ *       500:
+ *         description: Server error
+ */
+router.put('/roles/:roleId', checkAdmin, roleController.updateRoleCtr);
+
 
 module.exports = router;

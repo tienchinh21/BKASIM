@@ -1,0 +1,50 @@
+{
+  "development": {
+    "username": "sa",
+    "password": "123456",
+    "database": "BKASIM",
+    "host": "127.0.0.1",
+    "dialect": "mssql",
+    "dialectOptions": {
+      "options": {
+        "encrypt": false,
+        "enableArithAbort": true,
+        "trustServerCertificate": true,
+        "instanceName": "SQLEXPRESS"
+      }
+    },
+    "logging": true
+  },
+  "test": {
+    "username": "sa",
+    "password": "123456",
+    "database": "BKASIM",
+    "host": "127.0.0.1",
+    "dialect": "mssql",
+    "dialectOptions": {
+      "options": {
+        "encrypt": false,
+        "enableArithAbort": true,
+        "trustServerCertificate": true,
+        "instanceName": "SQLEXPRESS"
+      }
+    },
+    "logging": true
+  },
+  "production": {
+    "username": "sa",
+    "password": "123456",
+    "database": "BKASIM",
+    "host": "127.0.0.1",
+    "dialect": "mssql",
+    "dialectOptions": {
+      "options": {
+        "encrypt": false,
+        "enableArithAbort": true,
+        "trustServerCertificate": true,
+        "instanceName": "SQLEXPRESS"
+      }
+    },
+    "logging": true
+  }
+}

@@ -2,8 +2,6 @@ const express = require('express');
 const router = express.Router();
 const authController = require('../controller/AuthConTroller');
 
-
-
 /**
  * @swagger
  * /auth/register:
@@ -24,7 +22,7 @@ const authController = require('../controller/AuthConTroller');
  *               - avt
  *               - gender
  *               - company
- *               - field_of_study
+ *               - fieldOfStudy
  *               - job
  *               - role
  *             properties:
@@ -32,8 +30,10 @@ const authController = require('../controller/AuthConTroller');
  *                 type: string
  *               password:
  *                 type: string
- *               date_of_birth:
- *                 type: date
+ *               dateOfBirth:
+ *                 type: string
+ *                 format: date
+ *                 example: "2000-01-01"
  *               email:
  *                 type: string
  *               name:
@@ -44,12 +44,15 @@ const authController = require('../controller/AuthConTroller');
  *                 type: boolean
  *               company:
  *                 type: string
- *               field_of_study:
+ *               fieldOfStudy:
  *                 type: string
  *               job:
  *                 type: string
- *               role:
- *                 type: string
+ *               roleIds:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   format: uuid
  *     responses:
  *       201:
  *         description: User registered successfully
@@ -100,8 +103,43 @@ router.post('/auth/register', authController.registerCtr);
  */
 router.post('/auth/login', authController.loginCtr);
 
-
-
+/**
+ * @swagger
+ * /auth/refresh-token:
+ *   post:
+ *     summary: Refresh access token using refresh token
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - refresh_token
+ *             properties:
+ *               refresh_token:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Token refresh successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 access_token:
+ *                   type: string
+ *                 refresh_token:
+ *                   type: string
+ *       401:
+ *         description: Invalid or expired refresh token
+ *       500:
+ *         description: Server error
+ */
+router.post('/auth/refresh-token', authController.refreshTokenCtr);
 
 module.exports = router;
 

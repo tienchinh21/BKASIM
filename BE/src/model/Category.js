@@ -10,6 +10,10 @@ const Category = sequelize.define('Category', {
     name: {
         type: DataTypes.STRING,
         allowNull: false
+    },
+    status: {
+        type: DataTypes.STRING,
+        defaultValue: 'active'
     }
 }, {
     tableName: 'categories',
