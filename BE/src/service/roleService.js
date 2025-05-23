@@ -1,4 +1,4 @@
-const Role = require("../model/role");
+const Role = require("../model/Role");
 
 module.exports = {
     createRoleSrv: async (roleData) => {

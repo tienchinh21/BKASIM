@@ -5,19 +5,12 @@ const bookingController = require('../controller/bookingController');
 
 /**
  * @swagger
- * /booking/{receiverId}:
+ * /bookings:
  *   post:
- *     summary: Tạo cuộc hẹn với người dùng khác (mentor hoặc mentee)
+ *     summary: Tạo lịch hẹn với nhiều người
  *     tags: [Booking]
  *     security:
  *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: receiverId
- *         required: true
- *         description: ID của người được hẹn
- *         schema:
- *           type: string
  *     requestBody:
  *       required: true
  *       content:
@@ -28,21 +21,33 @@ const bookingController = require('../controller/bookingController');
  *               - bookingTitle
  *               - bookingDesc
  *               - schedulingTime
+ *               - participantIds
  *             properties:
  *               bookingTitle:
  *                 type: string
+ *                 example: "Họp nhóm mentor"
  *               bookingDesc:
  *                 type: string
+ *                 example: "Họp để review tiến độ công việc"
  *               schedulingTime:
  *                 type: string
  *                 format: date-time
+ *                 example: "2025-05-26T10:00:00Z"
+ *               participantIds:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   format: uuid
+ *                 example: ["uuid_user_1", "uuid_user_2"]
  *     responses:
  *       201:
- *         description: Tạo lịch thành công
+ *         description: Tạo lịch hẹn thành công
  *       400:
- *         description: Không đủ điều kiện đặt lịch
+ *         description: Dữ liệu đầu vào không hợp lệ
+ *       500:
+ *         description: Lỗi server
  */
-router.post('/booking/:receiverId', checkAuth, bookingController.createBooking);
+router.post('/bookings', checkAuth, bookingController.createBooking);
 
 /**
  * @swagger

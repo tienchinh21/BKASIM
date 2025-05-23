@@ -1,4 +1,5 @@
 const { createRoleSrv, getAllRolesSrv, deleteRoleSrv, updateRoleSrv } = require('../service/roleService');
+
 module.exports = {
     createRoleCtr: async (req, res) => {
         console.log(req.body);

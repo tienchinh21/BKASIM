@@ -19,7 +19,7 @@ module.exports = {
             where: whereClause,
             include: [
                 { model: Category, as: 'category' },
-                { model: User, as: 'author', attributes: ['id', 'username', 'name'] }
+                { model: User, as: 'author', attributes: ['id', 'name'] }
             ],
             order: [['createdAt', 'DESC']]
         });
@@ -29,7 +29,7 @@ module.exports = {
             where: { id },
             include: [
                 { model: Category, as: 'category' },
-                { model: User, as: 'author', attributes: ['id', 'username', 'name'] }
+                { model: User, as: 'author', attributes: ['id', 'name'] }
             ]
         });
         if (!blog) throw new Error('BLOG_NOT_FOUND');

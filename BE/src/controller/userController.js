@@ -1,6 +1,6 @@
 const { userDTO, checkUserDTO } = require('../DTOs/userDTO');
-const User = require('../model/user');
 const userService = require('../service/userService');
+const { User } = require('../model');
 
 module.exports = {
     getAllUsersCtr: async (req, res) => {

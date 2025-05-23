@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const authController = require('../controller/AuthConTroller');
+const authController = require('../controller/authConTroller');
 
 /**
  * @swagger
@@ -140,6 +140,80 @@ router.post('/auth/login', authController.loginCtr);
  *         description: Server error
  */
 router.post('/auth/refresh-token', authController.refreshTokenCtr);
+
+/**
+ * @swagger
+ * /auth/login-zalo:
+ *   post:
+ *     summary: Đăng nhập qua Zalo userId
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - zaloId
+ *             properties:
+ *               zaloId:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Đăng nhập thành công
+ *       404:
+ *         description: User chưa đăng ký
+ */
+router.post('/auth/login-zalo', authController.zaloLoginCtr);
+
+/**
+ * @swagger
+ * /auth/register-zalo:
+ *   post:
+ *     summary: Đăng ký người dùng mới qua Zalo
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - zaloId
+ *               - name
+ *               - roles
+ *             properties:
+ *               zaloId:
+ *                 type: string
+ *               name:
+ *                 type: string
+ *               avatar:
+ *                 type: string
+ *               gender:
+ *                 type: string
+ *               phone:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               job:
+ *                 type: string
+ *               fieldOfStudy:
+ *                 type: string
+ *               company:
+ *                 type: string
+ *               roles:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   enum: [mentor, mentee]
+ *                 description: Danh sách vai trò của người dùng
+ *     responses:
+ *       201:
+ *         description: Đăng ký thành công
+ *       400:
+ *         description: Lỗi đầu vào
+ */
+router.post('/auth/register-zalo', authController.registerZaloCtr);
 
 module.exports = router;
 

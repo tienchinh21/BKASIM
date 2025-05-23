@@ -7,25 +7,29 @@ const { checkAuth } = require('../middleware/checkAuth');
  * @swagger
  * /blogs:
  *   get:
- *     summary: Get all blogs with optional filters
+ *     summary: Lấy danh sách bài viết
  *     tags: [Blogs]
  *     parameters:
  *       - in: query
  *         name: categoryId
  *         schema:
  *           type: string
+ *         description: Lọc theo danh mục
  *       - in: query
  *         name: status
  *         schema:
  *           type: string
+ *         description: Lọc theo trạng thái (draft, published, etc.)
  *       - in: query
  *         name: search
  *         schema:
  *           type: string
+ *         description: Tìm kiếm theo tiêu đề/nội dung
  *     responses:
  *       200:
- *         description: List of blogs
+ *         description: Danh sách bài viết
  */
+
 router.get('/blogs', blogController.getAllBlogsCtr);
 
 /**
@@ -52,7 +56,7 @@ router.get('/blogs/:id', blogController.getBlogByIdCtr);
  * @swagger
  * /blogs:
  *   post:
- *     summary: Create new blog
+ *     summary: Tạo bài viết mới (từ CMS/admin)
  *     tags: [Blogs]
  *     security:
  *       - bearerAuth: []
@@ -65,6 +69,8 @@ router.get('/blogs/:id', blogController.getBlogByIdCtr);
  *             required:
  *               - title
  *               - content
+ *               - summary
+ *               - categoryId
  *             properties:
  *               title:
  *                 type: string
@@ -72,15 +78,20 @@ router.get('/blogs/:id', blogController.getBlogByIdCtr);
  *                 type: string
  *               content:
  *                 type: string
+ *                 description: Nội dung dạng HTML
  *               image:
  *                 type: string
  *               categoryId:
  *                 type: string
  *     responses:
  *       201:
- *         description: Blog created successfully
+ *         description: Bài viết được tạo thành công (HTML Response)
+ *         content:
+ *           text/html:
+ *             schema:
+ *               type: string
  *       404:
- *         description: Category not found
+ *         description: Không tìm thấy danh mục
  */
 router.post('/blogs', checkAuth, blogController.createBlogCtr);
 
@@ -121,7 +132,7 @@ router.post('/blogs', checkAuth, blogController.createBlogCtr);
  *       404:
  *         description: Blog not found
  */
-router.put('/blogs/:id', checkAuth, blogController.updateBlogCtr);
+router.put('/blogs/:id', blogController.updateBlogCtr);
 
 /**
  * @swagger

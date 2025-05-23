@@ -49,7 +49,7 @@ const swaggerOptions = {
             }
         ]
     },
-    apis: ['./src/router/*.js'] // Sửa lại path đúng với folder route của bạn
+    apis: ['./src/router/*.js']
 };
 
 

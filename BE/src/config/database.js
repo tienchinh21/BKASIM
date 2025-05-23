@@ -7,13 +7,12 @@ const sequelize = new Sequelize(
     process.env.DB_PASSWORD,
     {
         host: process.env.DB_HOST,
-        port: process.env.DB_PORT,
+        port: process.env.DB_PORT || 1433,
         dialect: 'mssql',
         dialectOptions: {
             options: {
                 encrypt: false,
-                trustServerCertificate: true,
-                instanceName: process.env.DB_INSTANCE
+                trustServerCertificate: true
             }
         },
         logging: false

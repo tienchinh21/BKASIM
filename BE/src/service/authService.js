@@ -121,5 +121,57 @@ module.exports = {
             }
             throw error;
         }
+    },
+    zaloLoginSrv: async (zaloId) => {
+        const user = await User.findOne({
+            where: { zaloId },
+            include: [{ model: Role, as: 'roles', through: { attributes: [] } }]
+        });
+
+        if (!user) return null;
+
+        const access_token = jwt.sign(
+            { id: user.id },
+            process.env.JWT_SECRET,
+            { expiresIn: '1d' }
+        );
+
+        return { access_token };
+    },
+    registerZaloSrv: async (data) => {
+        console.log(data);
+        const existing = await User.findOne({ where: { zaloId: data.zaloId } });
+        if (existing) throw new Error('Người dùng đã tồn tại');
+
+        const newUser = await User.create({
+            zaloId: data.zaloId,
+            name: data.name,
+            avatar: data.avatar || null,
+            email: data.email || null,
+            phone: data.phone || null,
+            gender: data.gender || null,
+            company: data.company || null,
+            fieldOfStudy: data.fieldOfStudy || null,
+            job: data.job || null,
+            status: 'pending'
+        });
+
+        if (!Array.isArray(data.roles)) {
+            throw new Error('Roles phải là một mảng');
+        }
+
+        const roles = await Role.findAll({ where: { name: data.roles } });
+        if (roles.length !== data.roles.length) {
+            throw new Error('Một hoặc nhiều vai trò không hợp lệ');
+        }
+
+        await newUser.addRoles(roles);
+
+        const access_token = jwt.sign(
+            { id: newUser.id },
+            process.env.JWT_SECRET,
+            { expiresIn: '1d' }
+        );
+        return { access_token };
     }
 }

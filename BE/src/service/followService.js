@@ -26,7 +26,7 @@ module.exports = {
             include: [{
                 model: User,
                 as: 'Follower',
-                attributes: ['id', 'name', 'avt'],
+                attributes: ['id', 'name'],
                 include: [{
                     model: Role,
                     as: 'roles',
@@ -63,14 +63,14 @@ module.exports = {
             include: [{
                 model: User,
                 as: 'Following',
-                attributes: ['id', 'name', 'avt']
+                attributes: ['id', 'name', 'avatar']
             }]
         });
 
         return follows.map(f => ({
             id: f.Following.id,
             name: f.Following.name,
-            avt: f.Following.avt,
+            avatar: f.Following.avatar,
             status: f.status
         }));
     }

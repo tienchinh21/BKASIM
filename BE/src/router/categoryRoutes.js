@@ -60,7 +60,7 @@ router.get('/categories/:id', checkAdmin, categoryController.getCategoryByIdCtr)
  *       409:
  *         description: Category name already exists
  */
-router.post('/categories', checkAdmin, categoryController.createCategoryCtr);
+router.post('/categories', categoryController.createCategoryCtr);
 
 /**
  * @swagger

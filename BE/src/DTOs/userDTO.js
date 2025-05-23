@@ -1,11 +1,11 @@
 const userDTO = (user) => {
     return {
         id: user.id,
-        username: user.username,
         dateOfBirth: user.dateOfBirth,
         email: user.email,
         name: user.name,
-        avt: user.avt,
+        phone: user.phone,
+        avatar: user.avatar,
         gender: user.gender,
         status: user.status,
         company: user.company,
@@ -25,13 +25,17 @@ const checkUserDTO = (user) => {
         id: user.id,
         email: user.email,
         name: user.name,
-        avt: user.avt,
+        phone: user.phone,
+        avatar: user.avatar,
         gender: user.gender,
         company: user.company,
         fieldOfStudy: user.fieldOfStudy,
         job: user.job,
     };
 }
+
+
+
 
 module.exports = {
     userDTO,

@@ -2,42 +2,20 @@ const { Booking, Follow, User } = require('../model');
 const { Op } = require('sequelize');
 
 module.exports = {
-    /**
-     * Tạo cuộc hẹn nếu đã follow nhau 2 chiều
-     */
-    createBookingSrv: async ({ createdBy, receiverId, bookingTitle, bookingDesc, schedulingTime }) => {
-        // Kiểm tra kết nối follow 2 chiều
-        const hasMutualFollow = await Follow.findOne({
-            where: {
-                followerId: createdBy,
-                followingId: receiverId,
-                status: 'confirmed'
-            },
-            include: [{
-                model: Follow,
-                as: 'reverse',
-                required: true,
-                where: {
-                    followerId: receiverId,
-                    followingId: createdBy,
-                    status: 'confirmed'
-                }
-            }]
-        });
-
-        if (!hasMutualFollow) {
-            throw new Error('Hai người chưa follow nhau 2 chiều – không thể đặt lịch.');
-        }
-
-        // Tạo booking
+    createBookingSrv: async ({ createdBy, bookingTitle, bookingDesc, schedulingTime, participantIds }) => {
         const booking = await Booking.create({
             createdBy,
-            receiverId,
             bookingTitle,
             bookingDesc,
-            schedulingTime,
-            status: 'pending'
+            schedulingTime
         });
+
+        const participants = participantIds.map(userId => ({
+            bookingId: booking.id,
+            userId
+        }));
+
+        await BookingParticipants.bulkCreate(participants);
 
         return booking;
     },

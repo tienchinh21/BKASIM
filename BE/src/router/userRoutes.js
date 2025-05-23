@@ -51,7 +51,6 @@ router.get('/users', checkAuth, userController.getAllUsersCtr);
  *       500:
  *         description: Lỗi server
  */
-
 router.get('/users/:userId', checkAuth, userController.getUserByIdCtr);
 
 
@@ -80,7 +79,7 @@ router.get('/users/:userId', checkAuth, userController.getUserByIdCtr);
  *         description: Lỗi server
  */
 
-router.put('/users/approve/:userId', checkAdmin, userController.approveUser);
+router.put('/users/approve/:userId', userController.approveUser);
 
 
 /**
@@ -136,6 +135,6 @@ router.put('/users/:userId', checkAdmin, userController.updateUserCtr);
  *       500:
  *         description: Lỗi server
  */
-router.delete('/users/:userId', checkAdmin, userController.deleteUserCtr);
+router.delete('/users/:userId', userController.deleteUserCtr);
 
 module.exports = router;

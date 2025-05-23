@@ -7,31 +7,50 @@ const User = sequelize.define('User', {
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true
     },
-    username: {
+    zaloId: {
         type: DataTypes.STRING,
-        allowNull: false
-    },
-    password: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    dateOfBirth: {
-        type: DataTypes.DATE,
+        unique: true,
         allowNull: true
     },
-    email: DataTypes.STRING,
-    name: DataTypes.STRING,
-    avt: DataTypes.STRING,
-    gender: DataTypes.BOOLEAN,
+    name: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    email: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    avatar: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    gender: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    phone: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    company: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    job: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    fieldOfStudy: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
     status: {
         type: DataTypes.STRING,
         defaultValue: 'pending'
-    },
-    company: DataTypes.STRING,
-    fieldOfStudy: DataTypes.STRING,
-    job: DataTypes.STRING,
-    phone: DataTypes.STRING,
+    }
 }, {
     tableName: 'users',
 });
+
 module.exports = User;
+

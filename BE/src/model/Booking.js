@@ -1,4 +1,4 @@
-const User = require("./user");
+const User = require("./User");
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 
@@ -25,10 +25,6 @@ const Booking = sequelize.define('Booking', {
         defaultValue: 'pending'
     },
     createdBy: {
-        type: DataTypes.UUID,
-        allowNull: false
-    },
-    receiverId: { // Người được hẹn
         type: DataTypes.UUID,
         allowNull: false
     }

@@ -1,20 +1,20 @@
 const bookingService = require('../service/bookingService');
 
 module.exports = {
-    /**
-     * Tạo cuộc hẹn với người khác (mentor hoặc mentee)
-     */
     createBooking: async (req, res) => {
         try {
-            const { receiverId } = req.params;
-            const { bookingTitle, bookingDesc, schedulingTime } = req.body;
+            const { bookingTitle, bookingDesc, schedulingTime, participantIds } = req.body;
+
+            if (!Array.isArray(participantIds) || participantIds.length === 0) {
+                return res.status(400).json({ message: 'Cần ít nhất một người được hẹn' });
+            }
 
             const result = await bookingService.createBookingSrv({
                 createdBy: req.user.id,
-                receiverId,
                 bookingTitle,
                 bookingDesc,
-                schedulingTime
+                schedulingTime,
+                participantIds
             });
 
             res.status(201).json(result);
@@ -23,7 +23,6 @@ module.exports = {
             res.status(500).json({ message: 'Lỗi server', error: error.message });
         }
     },
-
     /**
      * Xem chi tiết một lịch hẹn
      */
