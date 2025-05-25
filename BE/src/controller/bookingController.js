@@ -23,9 +23,6 @@ module.exports = {
             res.status(500).json({ message: 'Lỗi server', error: error.message });
         }
     },
-    /**
-     * Xem chi tiết một lịch hẹn
-     */
     getBookingDetail: async (req, res) => {
         try {
             const bookingId = req.params.id;
@@ -41,10 +38,6 @@ module.exports = {
             res.status(500).json({ message: 'Lỗi server', error: error.message });
         }
     },
-
-    /**
-     * Lấy tất cả lịch hẹn mà tôi tạo hoặc tôi là người được hẹn
-     */
     getMyBookingHistory: async (req, res) => {
         try {
             const userId = req.user.id;

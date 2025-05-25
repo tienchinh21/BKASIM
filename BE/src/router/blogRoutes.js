@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const blogController = require('../controller/blogController');
 const { checkAuth } = require('../middleware/checkAuth');
+const { checkAdmin } = require('../middleware/checkAdmin');
 
 /**
  * @swagger
@@ -93,7 +94,7 @@ router.get('/blogs/:id', blogController.getBlogByIdCtr);
  *       404:
  *         description: Không tìm thấy danh mục
  */
-router.post('/blogs', checkAuth, blogController.createBlogCtr);
+router.post('/blogs', checkAdmin, blogController.createBlogCtr);
 
 /**
  * @swagger
@@ -154,6 +155,6 @@ router.put('/blogs/:id', blogController.updateBlogCtr);
  *       404:
  *         description: Blog not found
  */
-router.delete('/blogs/:id', checkAuth, blogController.deleteBlogCtr);
+router.delete('/blogs/:id', checkAdmin, blogController.deleteBlogCtr);
 
 module.exports = router;

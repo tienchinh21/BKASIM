@@ -1,6 +1,7 @@
 const User = require("./User");
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
+const BookingParticipants = require("./BookingParticipants");
 
 const Booking = sequelize.define('Booking', {
     id: {
@@ -33,6 +34,5 @@ const Booking = sequelize.define('Booking', {
 });
 
 Booking.belongsTo(User, { as: 'createdByUser', foreignKey: 'createdBy' });
-Booking.belongsTo(User, { as: 'receiver', foreignKey: 'receiverId' });
 
 module.exports = Booking;

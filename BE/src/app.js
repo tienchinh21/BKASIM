@@ -6,13 +6,6 @@ const router = require('./router/index');
 const app = express();
 
 
-// require('./model/user');
-// require('./model/role');
-// require('./model/Blog');
-// require('./model/Category');
-// require('./model/Follow');
-
-
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -55,6 +48,12 @@ const swaggerOptions = {
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
+// Add endpoint to get Swagger JSON
+app.get('/api-docs.json', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(swaggerDocs);
+});
 
 app.use(router);
 

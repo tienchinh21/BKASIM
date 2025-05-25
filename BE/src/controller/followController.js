@@ -16,7 +16,6 @@ module.exports = {
     getReceivedFollows: async (req, res) => {
         try {
             const userId = req.user.id;
-            console.log('userId', userId);
             const followers = await followService.getPendingFollows(userId);
             res.json(followers);
         } catch (error) {

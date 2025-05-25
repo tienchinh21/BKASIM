@@ -1,13 +1,15 @@
 const express = require('express');
 const router = express.Router();
+const { checkAdmin } = require('../middleware/checkAdmin');
 const roleController = require('../controller/roleController');
-const checkAdmin = require('../middleware/checkAdmin');
 /**
  * @swagger
  * /roles:
  *   post:
  *     summary: Create a new role
  *     tags: [Role]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -36,6 +38,8 @@ router.post('/roles', checkAdmin, roleController.createRoleCtr);
  *   get:
  *     summary: Get all roles
  *     tags: [Role]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: List of roles
@@ -49,7 +53,9 @@ router.get('/roles', checkAdmin, roleController.getAllRolesCtr);
  * /roles/{roleId}:
  *   delete:
  *     summary: Delete a role by ID
- *     tags: [Role]
+    *     tags: [Role]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - name: roleId
  *         in: path
@@ -71,6 +77,8 @@ router.delete('/roles/:roleId', checkAdmin, roleController.deleteRoleCtr);
  *   put:
  *     summary: Update a role by ID
  *     tags: [Role]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - name: roleId
  *         in: path
@@ -95,6 +103,5 @@ router.delete('/roles/:roleId', checkAdmin, roleController.deleteRoleCtr);
  *         description: Server error
  */
 router.put('/roles/:roleId', checkAdmin, roleController.updateRoleCtr);
-
 
 module.exports = router;

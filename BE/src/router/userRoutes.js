@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const userController = require('../controller/userController');
 const { checkAuth } = require('../middleware/checkAuth');
-const checkAdmin = require('../middleware/checkAdmin');
+const { checkAdmin } = require('../middleware/checkAdmin');
 /**
  * @swagger
  * /users:
@@ -61,6 +61,8 @@ router.get('/users/:userId', checkAuth, userController.getUserByIdCtr);
  *     tags:
  *       - User
  *     summary: Duyệt tài khoản người dùng
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: userId
@@ -79,7 +81,7 @@ router.get('/users/:userId', checkAuth, userController.getUserByIdCtr);
  *         description: Lỗi server
  */
 
-router.put('/users/approve/:userId', userController.approveUser);
+router.put('/users/approve/:userId', checkAdmin, userController.approveUser);
 
 
 /**
@@ -89,6 +91,8 @@ router.put('/users/approve/:userId', userController.approveUser);
  *     tags:
  *       - User
  *     summary: Cập nhật thông tin người dùng
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: userId
@@ -122,6 +126,8 @@ router.put('/users/:userId', checkAdmin, userController.updateUserCtr);
  *     tags:
  *       - User
  *     summary: Xóa người dùng
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: userId
@@ -135,6 +141,6 @@ router.put('/users/:userId', checkAdmin, userController.updateUserCtr);
  *       500:
  *         description: Lỗi server
  */
-router.delete('/users/:userId', userController.deleteUserCtr);
+router.delete('/users/:userId', checkAdmin, userController.deleteUserCtr);
 
 module.exports = router;

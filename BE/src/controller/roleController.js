@@ -1,6 +1,6 @@
 const { createRoleSrv, getAllRolesSrv, deleteRoleSrv, updateRoleSrv } = require('../service/roleService');
 
-module.exports = {
+const roleController = {
     createRoleCtr: async (req, res) => {
         console.log(req.body);
         try {
@@ -12,7 +12,6 @@ module.exports = {
         } catch (err) {
             console.error(err);
             res.status(500).json({ message: 'Lỗi máy chủ' });
-
         }
     },
     getAllRolesCtr: async (req, res) => {
@@ -45,4 +44,6 @@ module.exports = {
             res.status(500).json({ message: 'Lỗi máy chủ' });
         }
     }
-}
+};
+
+module.exports = roleController;

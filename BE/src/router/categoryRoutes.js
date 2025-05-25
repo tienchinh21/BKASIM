@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const categoryController = require('../controller/categoryController');
-const checkAdmin = require('../middleware/checkAdmin');
+const { checkAdmin } = require('../middleware/checkAdmin');
 
 /**
  * @swagger
@@ -21,6 +21,8 @@ router.get('/categories', categoryController.getAllCategoriesCtr);
  *   get:
  *     summary: Get category by ID
  *     tags: [Categories]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -60,7 +62,7 @@ router.get('/categories/:id', checkAdmin, categoryController.getCategoryByIdCtr)
  *       409:
  *         description: Category name already exists
  */
-router.post('/categories', categoryController.createCategoryCtr);
+router.post('/categories', checkAdmin, categoryController.createCategoryCtr);
 
 /**
  * @swagger
