@@ -23,7 +23,10 @@ const Booking = sequelize.define('Booking', {
     },
     status: {
         type: DataTypes.STRING,
-        defaultValue: 'pending'
+        defaultValue: 'pending',
+        validate: {
+            isIn: [['pending', 'confirmed', 'cancelled', 'rejected', 'completed', 'flagged_by_admin']]
+        }
     },
     createdBy: {
         type: DataTypes.UUID,

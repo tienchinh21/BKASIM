@@ -1,6 +1,4 @@
-const { userDTO, checkUserDTO } = require('../DTOs/userDTO');
 const userService = require('../service/userService');
-const { User } = require('../model');
 
 module.exports = {
     getAllUsersCtr: async (req, res) => {
@@ -16,15 +14,6 @@ module.exports = {
             res.status(500).json({ message: 'Lỗi server', error: error.message });
         }
     },
-    // getUserByIdCtr: async (req, res) => {
-    //     const { userId } = req.params;
-    //     try {
-    //         const user = await userService.getUserByIdSrv(userId);
-    //         res.status(200).json(userDTO(user));
-    //     } catch (error) {
-    //         res.status(500).json({ message: 'Lỗi server', error: error.message });
-    //     }
-    // },
     getUserByIdCtr: async (req, res) => {
         const { userId } = req.params;
         const { view } = req.query;
@@ -61,16 +50,6 @@ module.exports = {
             res.status(500).json({ message: 'Lỗi server', error: error.message });
         }
     },
-    // updateUserCtr: async (req, res) => {
-    //     const { userId } = req.params;
-    //     const { name, email, dateOfBirth, gender, company, fieldOfStudy, job } = req.body;
-    //     try {
-    //         await userService.updateUserSrv(userId, { name, email, dateOfBirth, gender, company, fieldOfStudy, job });
-    //         res.status(200).json({ message: 'Cập nhật thông tin người dùng thành công' });
-    //     } catch (error) {
-    //         res.status(500).json({ message: 'Lỗi server', error: error.message });
-    //     }
-    // },
     deleteUserCtr: async (req, res) => {
         const { userId } = req.params;
         try {
@@ -83,6 +62,11 @@ module.exports = {
     updateUserCtr: async (req, res) => {
         const { userId } = req.params;
         const { name, email, dateOfBirth, gender, company, fieldOfStudy, job, phone } = req.body;
+
+        if (phone && !/^\d{10}$/.test(phone)) {
+            return res.status(400).json({ message: 'Số điện thoại phải có đúng 10 chữ số' });
+        }
+
         try {
             const user = await userService.updateUserSrv(userId, { name, email, dateOfBirth, gender, company, fieldOfStudy, job, phone });
             if (!user) {

@@ -1,7 +1,7 @@
 const bookingService = require('../service/bookingService');
 
 module.exports = {
-    createBooking: async (req, res) => {
+    createBookingCtrl: async (req, res) => {
         try {
             const { bookingTitle, bookingDesc, schedulingTime, participantIds } = req.body;
 
@@ -23,7 +23,7 @@ module.exports = {
             res.status(500).json({ message: 'Lỗi server', error: error.message });
         }
     },
-    getBookingDetail: async (req, res) => {
+    getBookingDetailCtrl: async (req, res) => {
         try {
             const bookingId = req.params.id;
             const booking = await bookingService.getBookingDetailSrv(bookingId);
@@ -38,14 +38,44 @@ module.exports = {
             res.status(500).json({ message: 'Lỗi server', error: error.message });
         }
     },
-    getMyBookingHistory: async (req, res) => {
+    getMyBookingHistoryCtrl: async (req, res) => {
         try {
             const userId = req.user.id;
-            const bookings = await bookingService.getMyBookingHistorySrv(userId);
-            res.json(bookings);
+            const {
+                fromDate,
+                toDate,
+                status,
+                page = 1,
+                limit = 10
+            } = req.query;
+
+            const result = await bookingService.getMyBookingHistorySrv(userId, {
+                fromDate,
+                toDate,
+                status,
+                page,
+                limit
+            });
+
+            res.json(result);
         } catch (error) {
             console.error('[getMyBookingHistory]', error);
             res.status(500).json({ message: 'Lỗi server', error: error.message });
         }
-    }
+    },
+    updateBookingStatusCtrl: async (req, res) => {
+        try {
+            const bookingId = req.params.id;
+            const { newStatus } = req.body;
+            const userId = req.user.id;
+
+            const result = await bookingService.updateBookingStatusSrv(bookingId, userId, newStatus);
+            res.json(result);
+        } catch (error) {
+            console.error('[updateBookingStatus]', error);
+            res.status(500).json({ message: 'Lỗi server', error: error.message });
+        }
+    },
+
+
 };

@@ -47,7 +47,7 @@ const bookingController = require('../controller/bookingController');
  *       500:
  *         description: Lỗi server
  */
-router.post('/bookings', checkAuth, bookingController.createBooking);
+router.post('/bookings', checkAuth, bookingController.createBookingCtrl);
 
 /**
  * @swagger
@@ -70,7 +70,7 @@ router.post('/bookings', checkAuth, bookingController.createBooking);
  *       404:
  *         description: Không tìm thấy
  */
-router.get('/booking/detail/:id', checkAuth, bookingController.getBookingDetail);
+router.get('/booking/detail/:id', checkAuth, bookingController.getBookingDetailCtrl);
 
 /**
  * @swagger
@@ -80,10 +80,75 @@ router.get('/booking/detail/:id', checkAuth, bookingController.getBookingDetail)
  *     tags: [Booking]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: fromDate
+ *         schema:
+ *           type: string
+ *           format: date
+ *       - in: query
+ *         name: toDate
+ *         schema:
+ *           type: string
+ *           format: date
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: string
+ *           enum: [pending, confirmed, cancelled, rejected, completed, flagged_by_admin]
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
  *     responses:
  *       200:
- *         description: Danh sách lịch sử
+ *         description: Danh sách lịch sử có phân trang
  */
-router.get('/booking/history', checkAuth, bookingController.getMyBookingHistory);
+
+router.get('/booking/history', checkAuth, bookingController.getMyBookingHistoryCtrl);
+
+/**
+ * @swagger
+ * /booking/{id}/status:
+ *   patch:
+ *     summary: Cập nhật trạng thái lịch hẹn
+ *     tags: [Booking]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID lịch hẹn
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               newStatus:
+ *                 type: string
+ *                 enum: [confirmed, rejected, cancelled, completed, flagged_by_admin]
+ *                 example: completed
+ *     responses:
+ *       200:
+ *         description: Cập nhật trạng thái thành công
+ *       400:
+ *         description: Trạng thái không hợp lệ hoặc không có quyền
+ *       404:
+ *         description: Không tìm thấy lịch hẹn
+ *       500:
+ *         description: Lỗi server
+ */
+router.patch('/booking/:id/status', checkAuth, bookingController.updateBookingStatusCtrl);
 
 module.exports = router;

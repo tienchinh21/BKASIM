@@ -15,6 +15,14 @@ const BookingParticipants = sequelize.define('BookingParticipants', {
     userId: {
         type: DataTypes.UUID,
         allowNull: false
+    },
+    isConfirmed: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+    },
+    isCompleted: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
     }
 }, {
     tableName: 'booking_participants'

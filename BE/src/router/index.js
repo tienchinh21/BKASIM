@@ -7,7 +7,7 @@ const categoryRoutes = require('./categoryRoutes');
 const blogRoutes = require('./blogRoutes');
 const followRoutes = require('./followsRoutes');
 const bookingRoutes = require('./bookingRoutes');
-
+const bookingAdminRoutes = require('./bookingAdminRoutes');
 router.use('/', roleRoutes);
 router.use('/', authRoutes);
 router.use('/', userRoutes);
@@ -15,5 +15,7 @@ router.use('/', categoryRoutes);
 router.use('/', blogRoutes);
 router.use('/', followRoutes);
 router.use('/', bookingRoutes);
+router.use('/admin', bookingAdminRoutes);
+
 
 module.exports = router;

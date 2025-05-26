@@ -5,7 +5,6 @@ const { User, Role } = require('../model');
 require('dotenv').config();
 module.exports = {
     registerUserSrv: async (userData) => {
-        console.log(userData);
         const {
             username, password, email, name, avt,
             gender, status, company, fieldOfStudy, job, roleIds,
@@ -85,7 +84,6 @@ module.exports = {
     },
     refreshTokenSrv: async (refresh_token) => {
         try {
-            // Verify the refresh token
             const decoded = jwt.verify(refresh_token, process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET);
 
             // Find the user
@@ -104,7 +102,6 @@ module.exports = {
                 { expiresIn: '1d' }
             );
 
-            // Generate new refresh token
             const new_refresh_token = jwt.sign(
                 { id: user.id, username: user.username },
                 process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET,
@@ -127,9 +124,7 @@ module.exports = {
             where: { zaloId },
             include: [{ model: Role, as: 'roles', through: { attributes: [] } }]
         });
-
         if (!user) return null;
-
         const access_token = jwt.sign(
             { id: user.id },
             process.env.JWT_SECRET,
@@ -142,6 +137,12 @@ module.exports = {
         console.log(data);
         const existing = await User.findOne({ where: { zaloId: data.zaloId } });
         if (existing) throw new Error('Người dùng đã tồn tại');
+
+        const existingEmail = await User.findOne({ where: { email: data.email } });
+        if (existingEmail) throw new Error('EMAIL_EXISTS');
+        if (data.phone && !/^\d{10}$/.test(data.phone)) {
+            throw new Error('Số điện thoại phải có đúng 10 chữ số');
+        }
 
         const newUser = await User.create({
             zaloId: data.zaloId,

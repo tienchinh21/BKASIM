@@ -38,7 +38,7 @@ module.exports = {
 
         const isAdmin = currentUser.roles.some(role => role.name === 'admin');
 
-        // Chỉ cho xem đầy đủ nếu là admin và view = admin
+        // xem đầy đủ nếu là admin & view = admin
         return (isAdmin && view === 'admin') ? userDTO(user) : checkUserDTO(user);
     },
     updateUserSrv: async (userId, userData) => {

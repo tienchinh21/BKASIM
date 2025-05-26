@@ -21,7 +21,6 @@ module.exports = {
         }
     },
     createCategoryCtr: async (req, res) => {
-        console.log(req.body);
         try {
             const category = await categoryService.createCategorySrv(req.body);
             res.status(201).json({
@@ -35,8 +34,6 @@ module.exports = {
             res.status(500).json({ message: 'Lỗi server', error: error.message });
         }
     },
-
-    // Update category
     updateCategoryCtr: async (req, res) => {
         try {
             const category = await categoryService.updateCategorySrv(req.params.id, req.body);
@@ -54,8 +51,6 @@ module.exports = {
             res.status(500).json({ message: 'Lỗi server', error: error.message });
         }
     },
-
-    // Delete category
     deleteCategoryCtr: async (req, res) => {
         try {
             const result = await categoryService.deleteCategorySrv(req.params.id);

@@ -57,8 +57,6 @@ module.exports = {
 
         const blog = await Blog.findOne({ where: { id } });
         if (!blog) throw new Error('BLOG_NOT_FOUND');
-
-        // Check if category exists if being updated
         if (categoryId) {
             const category = await Category.findOne({ where: { id: categoryId, status: 'active' } });
             if (!category) throw new Error('CATEGORY_NOT_FOUND');
