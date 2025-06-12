@@ -1,45 +1,6 @@
 const authService = require('../service/authService');
 
 module.exports = {
-    registerCtr: async (req, res) => {
-        try {
-            const user = await authService.registerUserSrv(req.body);
-            res.status(201).json({
-                message: 'Đăng ký thành công',
-                user
-            });
-        } catch (err) {
-            switch (err.message) {
-                case 'USERNAME_EXISTS':
-                    return res.status(409).json({ message: 'Tên đăng nhập đã tồn tại' });
-                case 'EMAIL_EXISTS':
-                    return res.status(409).json({ message: 'Email đã tồn tại' });
-                case 'INVALID_ROLE':
-                    return res.status(400).json({ message: 'Role không hợp lệ' });
-                default:
-                    console.error(err);
-                    return res.status(500).json({ message: 'Lỗi server' });
-            }
-        }
-    },
-    loginCtr: async (req, res) => {
-        try {
-            const tokens = await authService.loginUserSrv(req.body);
-            res.status(200).json({
-                message: 'Đăng nhập thành công',
-                ...tokens
-            });
-        } catch (err) {
-            switch (err.message) {
-                case 'INVALID_CREDENTIALS':
-                    return res.status(401).json({ message: 'Sai tên đăng nhập hoặc mật khẩu' });
-                case 'ACCOUNT_PENDING':
-                    return res.status(403).json({ message: 'Tài khoản của bạn đang chờ admin duyệt! Vui lòng chờ đợi...' });
-                default:
-                    return res.status(500).json({ message: 'Lỗi server', error: err.message });
-            }
-        }
-    },
     refreshTokenCtr: async (req, res) => {
         try {
             const { refresh_token } = req.body;
@@ -81,19 +42,19 @@ module.exports = {
 
             res.status(200).json(result);
         } catch (err) {
-            console.error('[zaloLoginCtr]', err);
+            if (err.message === 'ACCOUNT_PENDING') {
+                return res.status(403).json({ message: 'Tài khoản đang chờ admin duyệt!' });
+            }
             res.status(500).json({ message: 'Lỗi server', error: err.message });
         }
     },
     registerZaloCtr: async (req, res) => {
-        console.log(req.body);
         try {
             const data = req.body;
 
             if (!data.zaloId || !data.name || !Array.isArray(data.roles) || data.roles.length === 0) {
                 return res.status(400).json({ message: 'Thiếu thông tin bắt buộc' });
             }
-
             const result = await authService.registerZaloSrv(data);
             res.status(201).json(result);
         } catch (err) {
@@ -101,4 +62,33 @@ module.exports = {
             res.status(500).json({ message: 'Lỗi server', error: err.message });
         }
     }
+    // registerZaloCtr: async (req, res) => {
+    //     try {
+    //         const data = req.body;
+    //         const fileBuffer = req.file?.buffer || null;
+    //         const originalName = req.file?.originalname || null;
+
+    //         try {
+    //             data.roles = JSON.parse(data.roles); // Chuỗi JSON
+    //         } catch {
+    //             data.roles = [data.roles]; // Chuỗi đơn
+    //         }
+
+    //         if (!data.zaloId || !data.name || !Array.isArray(data.roles) || !data.roles.length) {
+    //             return res.status(400).json({ message: 'Thiếu thông tin bắt buộc' });
+    //         }
+
+    //         const result = await authService.registerZaloSrv({
+    //             ...data,
+    //             fileBuffer,
+    //             originalName
+    //         });
+
+    //         res.status(201).json(result);
+    //     } catch (err) {
+    //         console.error('[registerZaloCtr]', err);
+    //         res.status(500).json({ message: 'Lỗi server', error: err.message });
+    //     }
+    // }
+
 }

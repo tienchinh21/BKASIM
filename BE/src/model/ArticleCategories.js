@@ -13,7 +13,14 @@ const Category = sequelize.define('Category', {
     },
     status: {
         type: DataTypes.STRING,
-        defaultValue: 'active'
+        defaultValue: 'active',
+        validate: {
+            isIn: [['active', 'inactive']]
+        }
+    },
+    isDeleted: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
     }
 }, {
     tableName: 'categories',

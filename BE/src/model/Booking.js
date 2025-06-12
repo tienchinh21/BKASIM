@@ -1,7 +1,6 @@
 const User = require("./User");
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
-const BookingParticipants = require("./BookingParticipants");
 
 const Booking = sequelize.define('Booking', {
     id: {
@@ -31,6 +30,10 @@ const Booking = sequelize.define('Booking', {
     createdBy: {
         type: DataTypes.UUID,
         allowNull: false
+    },
+    isDeleted: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
     }
 }, {
     tableName: 'bookings'

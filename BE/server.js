@@ -21,3 +21,22 @@ const PORT = process.env.PORT || 3000;
         process.exit(1);
     }
 })();
+
+// (async () => {
+//     try {
+//         await sequelize.authenticate();
+//         console.log('Connected to SQL Server');
+
+//         // XÓA TOÀN BỘ VÀ TẠO LẠI CÁC BẢNG
+//         await sequelize.sync({ force: true });
+//         console.log('Database synchronized with force: true');
+
+//         app.listen(PORT, () => {
+//             console.log(`Server is running at http://localhost:${PORT}`);
+//             console.log(`Swagger docs at http://localhost:${PORT}/api-docs`);
+//         });
+//     } catch (error) {
+//         console.error('DB Connection failed:', error);
+//         process.exit(1);
+//     }
+// })();

@@ -10,7 +10,10 @@ module.exports = {
         return await Role.findAll();
     },
     deleteRoleSrv: async (roleId) => {
-        return await Role.destroy({ where: { id: roleId } });
+        const role = await Role.findByPk(roleId);
+        if (!role) return null;
+        await role.update({ isDeleted: true });
+        return role;
     },
     updateRoleSrv: async (roleId, name) => {
         return await Role.update({ name }, { where: { id: roleId } });

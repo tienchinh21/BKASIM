@@ -1,17 +1,35 @@
 const blogService = require('../service/blogService');
 const { mapBlogListDTO, mapBlogDetailDTO } = require('../DTOs/blogDTO');
 
+
+function parseBoolean(value) {
+    if (value === 'true') return true;
+    if (value === 'false') return false;
+    return undefined;
+}
 module.exports = {
     getAllBlogsCtr: async (req, res) => {
         try {
             const filters = {
+                isFeatured: parseBoolean(req.query.isFeatured),
                 categoryId: req.query.categoryId,
                 status: req.query.status,
                 search: req.query.search
             };
-            const blogs = await blogService.getAllBlogsSrv(filters);
-            const blogListDTO = blogs.map(mapBlogListDTO);
-            res.status(200).json(blogListDTO);
+            console.log(filters);
+
+            const page = parseInt(req.query.page) || 1;
+            const pageSize = parseInt(req.query.pageSize) || 10;
+
+            const { rows, count } = await blogService.getAllBlogsSrv(filters, page, pageSize);
+            const blogListDTO = rows.map(mapBlogListDTO);
+
+            res.status(200).json({
+                data: blogListDTO,
+                total: count,
+                page,
+                pageSize
+            });
         } catch (error) {
             res.status(500).json({ message: 'Lỗi server', error: error.message });
         }
@@ -20,20 +38,7 @@ module.exports = {
         try {
             const blog = await blogService.getBlogByIdSrv(req.params.id);
 
-            res.status(200).json({
-                id: blog.id,
-                title: blog.title,
-                summary: blog.summary,
-                image: blog.image,
-                createdAt: blog.createdAt,
-                content: `
-                    <h1>${blog.title}</h1>
-                    <p><strong>Ngày:</strong> ${new Date(blog.createdAt).toLocaleDateString()}</p>
-                    <p><strong>Tóm tắt:</strong> ${blog.summary}</p>
-                    ${blog.image ? `<img src="${blog.image}" alt="Ảnh minh hoạ" />` : ''}
-                    <div>${blog.content}</div>
-                `
-            });
+            res.status(200).json(blog);
         } catch (error) {
             if (error.message === 'BLOG_NOT_FOUND') {
                 return res.status(404).json({ message: 'Không tìm thấy bài viết' });
@@ -45,25 +50,15 @@ module.exports = {
         try {
             const blogData = {
                 ...req.body,
+                fileBuffer: req.file?.buffer || null,
+                originalName: req.file?.originalname || null,
                 authorId: req.user.id
             };
             const blog = await blogService.createBlogSrv(blogData);
-            res.status(201)
-                .set('Content-Type', 'text/html')
-                .send(`
-                    <html>
-                      <head>
-                        <meta charset="utf-8" />
-                      </head>
-                      <body>
-                        <h1>Tạo bài viết thành công!</h1>
-                        <p><b>Tiêu đề:</b> ${blog.title}</p>
-                        <p><b>Tóm tắt:</b> ${blog.summary}</p>
-                        <div><b>Nội dung:</b> ${blog.content}</div>
-                        ${blog.image ? `<p><b>Ảnh:</b> <img src="${blog.image}" alt="image" style="max-width:200px;"/></p>` : ''}
-                      </body>
-                    </html>
-                `);
+            res.status(201).json({
+                message: 'Tạo bài viết thành công',
+                blog
+            });
         } catch (error) {
             if (error.message === 'CATEGORY_NOT_FOUND') {
                 return res.status(404).json({ message: 'Không tìm thấy danh mục' });
@@ -73,10 +68,17 @@ module.exports = {
     },
     updateBlogCtr: async (req, res) => {
         try {
-            const blog = await blogService.updateBlogSrv(req.params.id, req.body);
+            const blogData = {
+                ...req.body,
+                fileBuffer: req.file?.buffer || null,
+                originalName: req.file?.originalname || null,
+            };
+
+            const blog = await blogService.updateBlogSrv(req.params.id, blogData);
+
             res.status(200).json({
                 message: 'Cập nhật bài viết thành công',
-                blog
+                blog,
             });
         } catch (error) {
             if (error.message === 'BLOG_NOT_FOUND') {
@@ -88,7 +90,6 @@ module.exports = {
             res.status(500).json({ message: 'Lỗi server', error: error.message });
         }
     },
-
     deleteBlogCtr: async (req, res) => {
         try {
             const result = await blogService.deleteBlogSrv(req.params.id);
@@ -99,5 +100,19 @@ module.exports = {
             }
             res.status(500).json({ message: 'Lỗi server', error: error.message });
         }
-    }
+    },
+    getFeaturedBlogCtrl: async (req, res) => {
+        try {
+            const blog = await blogService.getFeaturedBlogSrv();
+
+            if (!blog) {
+                return res.status(404).json({ message: 'Không có blog nổi bật' });
+            }
+
+            res.status(200).json(blog);
+        } catch (error) {
+            console.error('[getFeaturedBlog]', error);
+            res.status(500).json({ message: 'Lỗi server', error: error.message });
+        }
+    },
 };

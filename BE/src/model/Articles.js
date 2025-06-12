@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 const User = require('./User');
-const Category = require('./Category');
+const Category = require('./ArticleCategories');
 
 const Blog = sequelize.define('Blog', {
     id: {
@@ -25,22 +25,35 @@ const Blog = sequelize.define('Blog', {
         type: DataTypes.STRING,
         allowNull: true
     },
-    status: {
-        type: DataTypes.STRING,
-        defaultValue: 'draft'
-    },
     authorId: {
         type: DataTypes.UUID,
         allowNull: false,
         references: {
-            model: 'users',
+            model: 'userCMS',
             key: 'id'
+        }
+    },
+    status: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: 'active',
+        validate: {
+            isIn: [['active', 'inactive']]
         }
     },
     categoryId: {
         type: DataTypes.UUID,
         allowNull: false
+    },
+    isFeatured: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+    },
+    isDeleted: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
     }
+
 }, {
     tableName: 'blogs',
 });

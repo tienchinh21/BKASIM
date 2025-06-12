@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { checkAdmin } = require('../middleware/checkAdmin');
+// const { checkAdmin } = require('../middleware/checkAdmin');
 const roleController = require('../controller/roleController');
 /**
  * @swagger
@@ -8,8 +8,6 @@ const roleController = require('../controller/roleController');
  *   post:
  *     summary: Create a new role
  *     tags: [Role]
- *     security:
- *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -30,7 +28,7 @@ const roleController = require('../controller/roleController');
  *       409:
  *         description: Role already exists
  */
-router.post('/roles', checkAdmin, roleController.createRoleCtr);
+router.post('/roles', roleController.createRoleCtrl);
 
 /**
  * @swagger
@@ -38,15 +36,13 @@ router.post('/roles', checkAdmin, roleController.createRoleCtr);
  *   get:
  *     summary: Get all roles
  *     tags: [Role]
- *     security:
- *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: List of roles
  *       500:
  *         description: Server error
  */
-router.get('/roles', checkAdmin, roleController.getAllRolesCtr);
+router.get('/roles', roleController.getAllRolesCtrl);
 
 /**
  * @swagger
@@ -54,8 +50,6 @@ router.get('/roles', checkAdmin, roleController.getAllRolesCtr);
  *   delete:
  *     summary: Delete a role by ID
     *     tags: [Role]
- *     security:
- *       - bearerAuth: []
  *     parameters:
  *       - name: roleId
  *         in: path
@@ -69,7 +63,7 @@ router.get('/roles', checkAdmin, roleController.getAllRolesCtr);
  *       500:
  *         description: Server error
  */
-router.delete('/roles/:roleId', checkAdmin, roleController.deleteRoleCtr);
+router.delete('/roles/:roleId', roleController.deleteRoleCtrl);
 
 /**
  * @swagger
@@ -102,6 +96,6 @@ router.delete('/roles/:roleId', checkAdmin, roleController.deleteRoleCtr);
  *       500:
  *         description: Server error
  */
-router.put('/roles/:roleId', checkAdmin, roleController.updateRoleCtr);
+router.put('/roles/:roleId', roleController.updateRoleCtrl);
 
 module.exports = router;

@@ -1,6 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 const User = require('./User');
+const Role = require('./Role');
 
 const Follow = sequelize.define('Follow', {
     id: {
@@ -19,12 +20,32 @@ const Follow = sequelize.define('Follow', {
     status: {
         type: DataTypes.ENUM('pending', 'confirmed'),
         defaultValue: 'pending'
+    },
+    targetRoleId: {
+        type: DataTypes.UUID,
+        allowNull: true,
+        references: {
+            model: 'roles',
+            key: 'id'
+        }
+    },
+    followerRoleId: {
+        type: DataTypes.UUID,
+        allowNull: true,
+        references: {
+            model: 'roles',
+            key: 'id'
+        }
+    },
+    isDeleted: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
     }
 }, {
-    tableName: 'Follows',
+    tableName: 'follows',
 });
 
-Follow.belongsTo(User, { as: 'Follower', foreignKey: 'followerId' });
-Follow.belongsTo(User, { as: 'Following', foreignKey: 'followingId' });
+// Follow.belongsTo(User, { as: 'Follower', foreignKey: 'followerId' });
+// Follow.belongsTo(User, { as: 'Following', foreignKey: 'followingId' });
 
 module.exports = Follow;

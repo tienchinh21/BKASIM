@@ -7,7 +7,7 @@ const bookingController = require('../controller/bookingController');
  * @swagger
  * /bookings:
  *   post:
- *     summary: Tạo lịch hẹn với nhiều người
+ *     summary: Tạo lịch hẹn với nhiều người và vai trò
  *     tags: [Booking]
  *     security:
  *       - bearerAuth: []
@@ -21,7 +21,7 @@ const bookingController = require('../controller/bookingController');
  *               - bookingTitle
  *               - bookingDesc
  *               - schedulingTime
- *               - participantIds
+ *               - participantInfo
  *             properties:
  *               bookingTitle:
  *                 type: string
@@ -33,12 +33,22 @@ const bookingController = require('../controller/bookingController');
  *                 type: string
  *                 format: date-time
  *                 example: "2025-05-26T10:00:00Z"
- *               participantIds:
+ *               participantInfo:
  *                 type: array
  *                 items:
- *                   type: string
- *                   format: uuid
- *                 example: ["uuid_user_1", "uuid_user_2"]
+ *                   type: object
+ *                   required:
+ *                     - userId
+ *                     - role
+ *                   properties:
+ *                     userId:
+ *                       type: string
+ *                       format: uuid
+ *                       example: "uuid_user_1"
+ *                     role:
+ *                       type: string
+ *                       example: "mentee"
+ *                       description: Vai trò trong lịch hẹn (mentor / mentee)
  *     responses:
  *       201:
  *         description: Tạo lịch hẹn thành công
@@ -110,7 +120,6 @@ router.get('/booking/detail/:id', checkAuth, bookingController.getBookingDetailC
  *       200:
  *         description: Danh sách lịch sử có phân trang
  */
-
 router.get('/booking/history', checkAuth, bookingController.getMyBookingHistoryCtrl);
 
 /**

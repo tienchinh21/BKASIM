@@ -1,6 +1,5 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
-const Booking = require('./Booking');
 
 const BookingParticipants = sequelize.define('BookingParticipants', {
     id: {
@@ -23,9 +22,16 @@ const BookingParticipants = sequelize.define('BookingParticipants', {
     isCompleted: {
         type: DataTypes.BOOLEAN,
         defaultValue: false
+    },
+    role: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+            isIn: [['mentor', 'mentee']]
+        }
     }
 }, {
-    tableName: 'booking_participants'
+    tableName: 'bookingParticipants'
 });
 
 module.exports = BookingParticipants;

@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const blogController = require('../controller/blogController');
-const { checkAuth } = require('../middleware/checkAuth');
 const { checkAdmin } = require('../middleware/checkAdmin');
+const multer = require('multer');
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 /**
  * @swagger
@@ -32,6 +34,21 @@ const { checkAdmin } = require('../middleware/checkAdmin');
  */
 
 router.get('/blogs', blogController.getAllBlogsCtr);
+
+
+/**
+ * @swagger
+ * /blogs/featured:
+ *   get:
+ *     summary: Lấy bài viết nổi bật
+ *     tags: [Blogs]
+ *     responses:
+ *       200:
+ *         description: Bài viết nổi bật
+ */
+router.get('/blogs/featured', blogController.getFeaturedBlogCtrl);
+
+
 
 /**
  * @swagger
@@ -64,7 +81,7 @@ router.get('/blogs/:id', blogController.getBlogByIdCtr);
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             required:
@@ -79,11 +96,11 @@ router.get('/blogs/:id', blogController.getBlogByIdCtr);
  *                 type: string
  *               content:
  *                 type: string
- *                 description: Nội dung dạng HTML
- *               image:
- *                 type: string
  *               categoryId:
  *                 type: string
+ *               image:
+ *                 type: string
+ *                 format: binary
  *     responses:
  *       201:
  *         description: Bài viết được tạo thành công (HTML Response)
@@ -94,7 +111,7 @@ router.get('/blogs/:id', blogController.getBlogByIdCtr);
  *       404:
  *         description: Không tìm thấy danh mục
  */
-router.post('/blogs', checkAdmin, blogController.createBlogCtr);
+router.post('/blogs', checkAdmin, upload.single('image'), blogController.createBlogCtr);
 
 /**
  * @swagger
@@ -113,7 +130,7 @@ router.post('/blogs', checkAdmin, blogController.createBlogCtr);
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             properties:
@@ -123,17 +140,24 @@ router.post('/blogs', checkAdmin, blogController.createBlogCtr);
  *                 type: string
  *               image:
  *                 type: string
+ *                 format: binary
  *               categoryId:
  *                 type: string
  *               status:
  *                 type: string
+ *               summary:
+ *                 type: string
+ *               isFeatured:
+ *                 type: boolean
+
  *     responses:
  *       200:
  *         description: Blog updated successfully
  *       404:
  *         description: Blog not found
  */
-router.put('/blogs/:id', blogController.updateBlogCtr);
+router.put('/blogs/:id', checkAdmin, upload.single('image'), blogController.updateBlogCtr);
+
 
 /**
  * @swagger

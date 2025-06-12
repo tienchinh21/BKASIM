@@ -1,145 +1,15 @@
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
 const authController = require('../controller/authConTroller');
 
-/**
- * @swagger
- * /auth/register:
- *   post:
- *     summary: Register a new user
- *     tags: [Auth]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - username
- *               - password
- *               - email
- *               - name
- *               - avt
- *               - gender
- *               - company
- *               - fieldOfStudy
- *               - job
- *               - role
- *             properties:
- *               username:
- *                 type: string
- *               password:
- *                 type: string
- *               dateOfBirth:
- *                 type: string
- *                 format: date
- *                 example: "2000-01-01"
- *               email:
- *                 type: string
- *               name:
- *                 type: string
- *               avt:
- *                 type: string
- *               gender:
- *                 type: boolean
- *               company:
- *                 type: string
- *               fieldOfStudy:
- *                 type: string
- *               job:
- *                 type: string
- *               roleIds:
- *                 type: array
- *                 items:
- *                   type: string
- *                   format: uuid
- *     responses:
- *       201:
- *         description: User registered successfully
- *       400:
- *         description: Bad request
- *       409:
- *         description: User already exists
- */
-router.post('/auth/register', authController.registerCtr);
-
-
-/**
- * @swagger
- * /auth/login:
- *   post:
- *     summary: Login a user
- *     tags: [Auth]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - username
- *               - password
- *             properties:
- *               username:
- *                 type: string
- *               password:
- *                 type: string
- *     responses:
- *       200:
- *         description: Login successful
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 token:
- *                   type: string
- *       401:
- *         description: Invalid username or password
- *       403:
- *         description: Account is pending approval
- *       500:
- *         description: Server error
- */
-router.post('/auth/login', authController.loginCtr);
-
-/**
- * @swagger
- * /auth/refresh-token:
- *   post:
- *     summary: Refresh access token using refresh token
- *     tags: [Auth]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - refresh_token
- *             properties:
- *               refresh_token:
- *                 type: string
- *     responses:
- *       200:
- *         description: Token refresh successful
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                 access_token:
- *                   type: string
- *                 refresh_token:
- *                   type: string
- *       401:
- *         description: Invalid or expired refresh token
- *       500:
- *         description: Server error
- */
-router.post('/auth/refresh-token', authController.refreshTokenCtr);
+const storage = multer.memoryStorage();
+const upload = multer({
+    storage,
+    limits: {
+        fileSize: 1024 * 1024 * 5, // 5MB
+    }
+});
 
 /**
  * @swagger
@@ -170,7 +40,7 @@ router.post('/auth/login-zalo', authController.zaloLoginCtr);
  * @swagger
  * /auth/register-zalo:
  *   post:
- *     summary: Đăng ký người dùng mới qua Zalo
+ *     summary: Đăng ký người dùng mới qua Zalo (có avatar)
  *     tags: [Auth]
  *     requestBody:
  *       required: true
@@ -189,6 +59,7 @@ router.post('/auth/login-zalo', authController.zaloLoginCtr);
  *                 type: string
  *               avatar:
  *                 type: string
+ *                 format: binary
  *               gender:
  *                 type: string
  *               phone:
@@ -202,19 +73,18 @@ router.post('/auth/login-zalo', authController.zaloLoginCtr);
  *               company:
  *                 type: string
  *               roles:
- *                 type: array
- *                 items:
- *                   type: string
- *                   enum: [mentor, mentee]
- *                 description: Danh sách vai trò của người dùng
+ *                 type: string
+ *                 example: '["mentor", "mentee"]'
  *     responses:
  *       201:
  *         description: Đăng ký thành công
  *       400:
  *         description: Lỗi đầu vào
+ *       409:
+ *         description: Người dùng đã tồn tại
+ *       500:
+ *         description: Lỗi server
  */
-router.post('/auth/register-zalo', authController.registerZaloCtr);
+router.post('/auth/register-zalo', upload.single('avatar'), authController.registerZaloCtr);
 
 module.exports = router;
-
-

@@ -46,7 +46,14 @@ const User = sequelize.define('User', {
     },
     status: {
         type: DataTypes.STRING,
-        defaultValue: 'pending'
+        defaultValue: 'pending',
+        validate: {
+            isIn: [['pending', 'approved', 'rejected']]
+        }
+    },
+    isDeleted: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
     }
 }, {
     tableName: 'users',

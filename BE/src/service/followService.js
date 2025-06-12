@@ -18,12 +18,8 @@ const FOLLOWING_INCLUDE_OPTIONS = [{
 }];
 
 module.exports = {
-    sendFollowRequest: async (senderId, targetId) => {
+    sendFollowRequest: async (senderId, targetId, targetRoleId, followerRoleId) => {
         try {
-            if (senderId === targetId) {
-                return { status: 400, message: 'Không thể tự follow chính mình.' };
-            }
-
             const targetUser = await User.findByPk(targetId);
             if (!targetUser) {
                 return { status: 404, message: 'Người dùng không tồn tại.' };
@@ -31,7 +27,11 @@ module.exports = {
 
             const [follow, created] = await Follow.findOrCreate({
                 where: { followerId: senderId, followingId: targetId },
-                defaults: { status: 'pending' }
+                defaults: {
+                    status: 'pending',
+                    targetRoleId,
+                    followerRoleId
+                }
             });
 
             if (!created) {
@@ -40,11 +40,9 @@ module.exports = {
 
             return { status: 201, message: 'Đã gửi yêu cầu follow.' };
         } catch (error) {
-            console.error(error);
-            return { status: 500, message: 'Lỗi máy chủ.' };
+            return { status: 500, message: 'Lỗi máy chủ', error: error.message };
         }
     },
-
     getPendingFollows: async (userId, limit = 10, offset = 0) => {
         try {
             const follows = await Follow.findAll({
@@ -60,7 +58,6 @@ module.exports = {
             return [];
         }
     },
-
     confirmFollow: async (followerId, userId) => {
         try {
             const follow = await Follow.findOne({
@@ -78,34 +75,66 @@ module.exports = {
             follow.status = 'confirmed';
             await follow.save();
 
-            return { status: 200, message: 'Đã xác nhận follow.' };
+            const [reverseFollow, created] = await Follow.findOrCreate({
+                where: {
+                    followerId: userId,
+                    followingId: followerId
+                },
+                defaults: {
+                    status: 'confirmed',
+                    targetRoleId: follow.followerRoleId || null,
+                    followerRoleId: follow.targetRoleId || null
+                }
+            });
+
+            if (!created && reverseFollow.status !== 'confirmed') {
+                reverseFollow.status = 'confirmed';
+                await reverseFollow.save();
+            }
+
+            return { status: 200, message: 'Đã xác nhận' };
         } catch (error) {
-            console.error(error);
+            console.error('[confirmFollow]', error);
             return { status: 500, message: 'Lỗi máy chủ.' };
         }
     },
-
-    getSentFollows: async (userId, limit = 10, offset = 0) => {
+    getPendingFollows: async (userId, limit = 10, offset = 0) => {
         try {
             const follows = await Follow.findAll({
-                where: { followerId: userId },
-                include: FOLLOWING_INCLUDE_OPTIONS,
+                where: {
+                    followingId: userId,
+                    status: 'pending'
+                },
+                include: [
+                    {
+                        model: User,
+                        as: 'Follower',
+                        attributes: ['id', 'name', 'avatar']
+                    },
+                    {
+                        model: Role,
+                        as: 'FollowerRole',
+                        attributes: ['id', 'name']
+                    }
+                ],
                 limit,
                 offset
             });
 
             return follows.map(f => ({
-                id: f.Following.id,
-                name: f.Following.name,
-                avatar: f.Following.avatar,
-                status: f.status
+                id: f.Follower.id,
+                name: f.Follower.name,
+                avatar: f.Follower.avatar,
+                role: f.FollowerRole ? {
+                    id: f.FollowerRole.id,
+                    name: f.FollowerRole.name
+                } : null
             }));
         } catch (error) {
-            console.error(error);
+            console.error('[getPendingFollows]', error);
             return [];
         }
     },
-
     rejectFollow: async (followerId, userId) => {
         try {
             const follow = await Follow.findOne({
@@ -127,7 +156,6 @@ module.exports = {
             return { status: 500, message: 'Lỗi máy chủ.' };
         }
     },
-
     unfollow: async (followerId, followingId) => {
         try {
             const follow = await Follow.findOne({

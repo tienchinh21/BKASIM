@@ -1,24 +1,33 @@
-const { Category } = require('../model');
+const { Op } = require('sequelize');
+const { ArticleCategories } = require('../model');
 
 module.exports = {
-    getAllCategoriesSrv: async () => {
-        return await Category.findAll({
-            where: { status: 'active' }
+    getAllCategoriesSrv: async (name, status, page = 1, pageSize = 10) => {
+        const where = {};
+        if (name) where.name = { [Op.like]: `%${name}%` };
+        if (status) where.status = status;
+        return await ArticleCategories.findAndCountAll({
+            where,
+            offset: (page - 1) * pageSize,
+            limit: pageSize,
+            order: [['createdAt', 'DESC']]
         });
     },
+
     getCategoryByIdSrv: async (id) => {
-        const category = await Category.findOne({
-            where: { id, status: 'active' }
+        const category = await ArticleCategories.findOne({
+            where: { id }
         });
         if (!category) throw new Error('CATEGORY_NOT_FOUND');
         return category;
     },
     createCategorySrv: async (categoryData) => {
+        console.log(categoryData);
         const { name } = categoryData;
-        const existingCategory = await Category.findOne({ where: { name } });
+        const existingCategory = await ArticleCategories.findOne({ where: { name } });
         if (existingCategory) throw new Error('CATEGORY_NAME_EXISTS');
 
-        return await Category.create({
+        return await ArticleCategories.create({
             name,
             status: 'active'
         });
@@ -26,12 +35,16 @@ module.exports = {
     updateCategorySrv: async (id, categoryData) => {
         const { name, status } = categoryData;
 
-        const category = await Category.findOne({ where: { id } });
+        const category = await ArticleCategories.findOne({ where: { id } });
         if (!category) throw new Error('CATEGORY_NOT_FOUND');
 
-        // If name is being changed, check if new name already exists
         if (name && name !== category.name) {
-            const existingCategory = await Category.findOne({ where: { name } });
+            const existingCategory = await ArticleCategories.findOne({
+                where: {
+                    name,
+                    id: { [Op.ne]: id }
+                }
+            });
             if (existingCategory) throw new Error('CATEGORY_NAME_EXISTS');
         }
 
@@ -42,8 +55,9 @@ module.exports = {
 
         return category;
     },
+
     deleteCategorySrv: async (id) => {
-        const category = await Category.findOne({ where: { id } });
+        const category = await ArticleCategories.findOne({ where: { id } });
         if (!category) throw new Error('CATEGORY_NOT_FOUND');
 
         await category.update({ status: 'inactive' });

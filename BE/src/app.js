@@ -4,6 +4,7 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerJsDoc = require('swagger-jsdoc');
 const router = require('./router/index');
 const app = express();
+require('dotenv').config();
 
 
 app.use(cors());
@@ -23,9 +24,9 @@ const swaggerOptions = {
             }
         },
         servers: [
-            {
-                url: 'http://localhost:3000'
-            }
+            { url: 'http://localhost:3050' },
+            { url: process.env.SWAGGER_SERVER_URL || 'https://bkasim.duckdns.org' },
+            { url: 'https://database-1.cdw6qe0uaknp.ap-southeast-1.rds.amazonaws.com' }
         ],
         components: {
             securitySchemes: {
@@ -42,14 +43,13 @@ const swaggerOptions = {
             }
         ]
     },
-    apis: ['./src/router/*.js']
+    apis: ['./src/router/*.js', './src/router/adminRouter/*.js']
 };
 
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-// Add endpoint to get Swagger JSON
 app.get('/api-docs.json', (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     res.send(swaggerDocs);

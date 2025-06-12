@@ -24,6 +24,19 @@ const followController = require('../controller/followController');
  *         schema:
  *           type: string
  *         description: ID người muốn follow
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               targetRoleId:
+ *                 type: string
+ *                 description: ID vai trò của người được follow
+ *               followerRoleId:
+ *                 type: string
+ *                 description: ID vai trò của người gửi follow
  *     responses:
  *       201:
  *         description: Gửi follow thành công
@@ -32,7 +45,7 @@ const followController = require('../controller/followController');
  *       404:
  *         description: Người dùng không tồn tại
  */
-router.post('/follows/:userId', checkAuth, followController.sendFollowRequestCtr);
+router.post('/follows/:userId', checkAuth, followController.sendFollowRequestCtrl);
 
 /**
  * @swagger
@@ -57,7 +70,7 @@ router.post('/follows/:userId', checkAuth, followController.sendFollowRequestCtr
  *       200:
  *         description: Danh sách người gửi follow
  */
-router.get('/follows/received', checkAuth, followController.getReceivedFollowsCtr);
+router.get('/follows/received', checkAuth, followController.getReceivedFollowsCtrl);
 
 /**
  * @swagger
@@ -80,7 +93,7 @@ router.get('/follows/received', checkAuth, followController.getReceivedFollowsCt
  *       404:
  *         description: Không tìm thấy yêu cầu follow
  */
-router.post('/follows/accept/:followerId', checkAuth, followController.acceptFollowCtr);
+router.post('/follows/accept/:followerId', checkAuth, followController.acceptFollowCtrl);
 
 /**
  * @swagger
@@ -103,7 +116,7 @@ router.post('/follows/accept/:followerId', checkAuth, followController.acceptFol
  *       404:
  *         description: Không tìm thấy yêu cầu follow
  */
-router.post('/follows/reject/:followerId', checkAuth, followController.rejectFollowCtr);
+router.post('/follows/reject/:followerId', checkAuth, followController.rejectFollowCtrl);
 
 /**
  * @swagger
@@ -126,7 +139,7 @@ router.post('/follows/reject/:followerId', checkAuth, followController.rejectFol
  *       404:
  *         description: Không tìm thấy mối quan hệ follow
  */
-router.post('/follows/unfollow/:followingId', checkAuth, followController.unfollowCtr);
+router.post('/follows/unfollow/:followingId', checkAuth, followController.unfollowCtrl);
 
 /**
  * @swagger
@@ -151,7 +164,7 @@ router.post('/follows/unfollow/:followingId', checkAuth, followController.unfoll
  *       200:
  *         description: Danh sách người đã gửi follow
  */
-router.get('/follows/sent', checkAuth, followController.getSentFollowsCtr);
+router.get('/follows/sent', checkAuth, followController.getSentFollowsCtrl);
 
 /**
  * @swagger
@@ -176,7 +189,7 @@ router.get('/follows/sent', checkAuth, followController.getSentFollowsCtr);
  *       200:
  *         description: Danh sách followers
  */
-router.get('/follows/followers', checkAuth, followController.getFollowersCtr);
+router.get('/follows/followers', checkAuth, followController.getFollowersCtrl);
 
 /**
  * @swagger
@@ -201,6 +214,6 @@ router.get('/follows/followers', checkAuth, followController.getFollowersCtr);
  *       200:
  *         description: Danh sách following
  */
-router.get('/follows/following', checkAuth, followController.getFollowingCtr);
+router.get('/follows/following', checkAuth, followController.getFollowingCtrl);
 
 module.exports = router;

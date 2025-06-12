@@ -13,7 +13,7 @@ const { checkAdmin } = require('../middleware/checkAdmin');
  *       200:
  *         description: List of categories
  */
-router.get('/categories', categoryController.getAllCategoriesCtr);
+router.get('/categories', categoryController.getAllCategoriesCtrl);
 
 /**
  * @swagger
@@ -35,7 +35,7 @@ router.get('/categories', categoryController.getAllCategoriesCtr);
  *       404:
  *         description: Category not found
  */
-router.get('/categories/:id', checkAdmin, categoryController.getCategoryByIdCtr);
+router.get('/categories/:id', checkAdmin, categoryController.getCategoryByIdCtrl);
 
 /**
  * @swagger
@@ -62,7 +62,7 @@ router.get('/categories/:id', checkAdmin, categoryController.getCategoryByIdCtr)
  *       409:
  *         description: Category name already exists
  */
-router.post('/categories', checkAdmin, categoryController.createCategoryCtr);
+router.post('/categories', checkAdmin, categoryController.createCategoryCtrl);
 
 /**
  * @swagger
@@ -95,7 +95,7 @@ router.post('/categories', checkAdmin, categoryController.createCategoryCtr);
  *       404:
  *         description: Category not found
  */
-router.put('/categories/:id', checkAdmin, categoryController.updateCategoryCtr);
+router.put('/categories/:id', checkAdmin, categoryController.updateCategoryCtrl);
 
 /**
  * @swagger
@@ -117,6 +117,6 @@ router.put('/categories/:id', checkAdmin, categoryController.updateCategoryCtr);
  *       404:
  *         description: Category not found
  */
-router.delete('/categories/:id', checkAdmin, categoryController.deleteCategoryCtr);
+router.delete('/categories/:id', checkAdmin, categoryController.deleteCategoryCtrl);
 
 module.exports = router;

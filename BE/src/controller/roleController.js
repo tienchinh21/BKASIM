@@ -1,8 +1,7 @@
 const { createRoleSrv, getAllRolesSrv, deleteRoleSrv, updateRoleSrv } = require('../service/roleService');
 
 const roleController = {
-    createRoleCtr: async (req, res) => {
-        console.log(req.body);
+    createRoleCtrl: async (req, res) => {
         try {
             const role = await createRoleSrv(req.body);
             res.status(201).json({
@@ -11,29 +10,29 @@ const roleController = {
             });
         } catch (err) {
             console.error(err);
-            res.status(500).json({ message: 'Lỗi máy chủ' });
+            res.status(500).json({ message: 'Lỗi máy chủ', error: err.message });
         }
     },
-    getAllRolesCtr: async (req, res) => {
+    getAllRolesCtrl: async (req, res) => {
         try {
             const roles = await getAllRolesSrv();
             res.status(200).json(roles);
         } catch (err) {
             console.error(err);
-            res.status(500).json({ message: 'Lỗi máy chủ' });
+            res.status(500).json({ message: 'Lỗi máy chủ', error: err.message });
         }
     },
-    deleteRoleCtr: async (req, res) => {
+    deleteRoleCtrl: async (req, res) => {
         const { roleId } = req.params;
         try {
             await deleteRoleSrv(roleId);
             res.status(200).json({ message: 'Vai trò đã được xóa thành công' });
         } catch (err) {
             console.error(err);
-            res.status(500).json({ message: 'Lỗi máy chủ' });
+            res.status(500).json({ message: 'Lỗi máy chủ', error: err.message });
         }
     },
-    updateRoleCtr: async (req, res) => {
+    updateRoleCtrl: async (req, res) => {
         const { roleId } = req.params;
         const { name } = req.body;
         try {
@@ -41,7 +40,7 @@ const roleController = {
             res.status(200).json({ message: 'Vai trò đã được cập nhật thành công' });
         } catch (err) {
             console.error(err);
-            res.status(500).json({ message: 'Lỗi máy chủ' });
+            res.status(500).json({ message: 'Lỗi máy chủ', error: err.message });
         }
     }
 };

@@ -1,59 +1,12 @@
 const { detailBookingDTO } = require('../DTOs/bookingDTO');
-const { Booking, Follow, User, BookingParticipants, Role } = require('../model');
+const { Booking, User, BookingParticipants, Role } = require('../model');
 const { Op } = require('sequelize');
 
 module.exports = {
-    createBookingSrv: async ({ createdBy, bookingTitle, bookingDesc, schedulingTime, participantIds }) => {
-        const booking = await Booking.create({
-            createdBy,
-            bookingTitle,
-            bookingDesc,
-            schedulingTime
-        });
-
-        // Thêm người được mời với isConfirmed = false
-        const participants = participantIds.map(userId => ({
-            bookingId: booking.id,
-            userId,
-            isConfirmed: false
-        }));
-
-        // Thêm chính người tạo vào luôn với isConfirmed = true
-        participants.push({
-            bookingId: booking.id,
-            userId: createdBy,
-            isConfirmed: true
-        });
-
-        await BookingParticipants.bulkCreate(participants);
-
-        return booking;
-    },
-    getBookingDetailSrv: async (bookingId) => {
-        const booking = await Booking.findOne({
-            where: { id: bookingId },
-            include: [
-                { model: User, as: 'createdByUser', attributes: ['id', 'name'] },
-                {
-                    model: User, as: 'participants', attributes: ['id', 'name'],
-                    include: [{ model: Role, as: 'roles', attributes: ['id', 'name'] }]
-                }
-            ]
-        });
-
-        return detailBookingDTO(booking);
-    },
-    getMyBookingHistorySrv: async (userId, filters = {}) => {
-        const { fromDate, toDate, status, page = 1, limit = 10 } = filters;
-
+    getMyBookingHistorySrv: async (userId, { page = 1, limit = 10, status, fromDate, toDate }) => {
         const offset = (page - 1) * limit;
 
-        const whereBooking = {
-            [Op.or]: [
-                { createdBy: userId },
-                { '$participants.BookingParticipants.userId$': userId }
-            ]
-        };
+        const whereBooking = {};
 
         if (status) whereBooking.status = status;
 
@@ -67,11 +20,16 @@ module.exports = {
             where: whereBooking,
             include: [
                 {
+                    model: BookingParticipants,
+                    as: 'bookingParticipants',
+                    where: { userId },
+                    attributes: []
+                },
+                {
                     model: User,
                     as: 'participants',
-                    required: true,
                     attributes: ['id', 'name'],
-                    through: { attributes: [] }
+                    through: { attributes: ['role'] }
                 },
                 {
                     model: User,
@@ -85,23 +43,39 @@ module.exports = {
         });
 
         const data = rows.map(booking => {
-            const isCreator = booking.createdBy === userId;
             const bookingData = booking.toJSON();
+            const isCreator = bookingData.createdBy === userId;
 
             if (isCreator) {
                 return {
-                    ...bookingData,
+                    id: bookingData.id,
+                    bookingTitle: bookingData.bookingTitle,
+                    bookingDesc: bookingData.bookingDesc,
+                    schedulingTime: bookingData.schedulingTime,
+                    status: bookingData.status,
+                    createdBy: bookingData.createdBy,
+                    createdByUser: bookingData.createdByUser,
+                    createdByRole: bookingData.participants.find(p => p.id === bookingData.createdBy)?.BookingParticipants?.role || null,
                     participants: bookingData.participants
+                        .filter(p => String(p.id) !== String(bookingData.createdBy))
+                        .map(p => ({
+                            id: p.id,
+                            name: p.name,
+                            role: p.BookingParticipants?.role || null
+                        })),
+                    createdAt: bookingData.createdAt,
+                    updatedAt: bookingData.updatedAt
                 };
             } else {
                 return {
                     id: bookingData.id,
-                    title: bookingData.bookingTitle,
-                    description: bookingData.bookingDesc,
-                    startTime: bookingData.schedulingTime,
-                    endTime: bookingData.schedulingTime,
+                    bookingTitle: bookingData.bookingTitle,
+                    bookingDesc: bookingData.bookingDesc,
+                    schedulingTime: bookingData.schedulingTime,
                     status: bookingData.status,
+                    createdBy: bookingData.createdBy,
                     createdByUser: bookingData.createdByUser,
+                    participants: [],
                     createdAt: bookingData.createdAt,
                     updatedAt: bookingData.updatedAt
                 };
@@ -208,4 +182,110 @@ module.exports = {
 
         throw new Error('Không xử lý được trạng thái này');
     },
+    createBookingSrv: async ({ createdBy, bookingTitle, bookingDesc, schedulingTime, participantInfo, createdByRole }) => {
+        const hasRole = await User.findOne({
+            where: { id: createdBy },
+            include: {
+                model: Role,
+                as: 'roles',
+                where: { name: createdByRole }
+            }
+        });
+        if (!hasRole) throw new Error('Người tạo không có vai trò đã chọn');
+
+        const booking = await Booking.create({
+            createdBy,
+            bookingTitle,
+            bookingDesc,
+            schedulingTime
+        });
+
+        const participants = participantInfo.map(p => ({
+            bookingId: booking.id,
+            userId: p.userId,
+            role: p.role,
+            isConfirmed: false
+        }));
+
+        participants.push({
+            bookingId: booking.id,
+            userId: createdBy,
+            role: createdByRole,
+            isConfirmed: true
+        });
+
+        await BookingParticipants.bulkCreate(participants);
+
+        return booking;
+    },
+    getBookingDetailSrv: async (bookingId, userId) => {
+        const booking = await Booking.findOne({
+            where: { id: bookingId },
+            include: [
+                { model: User, as: 'createdByUser', attributes: ['id', 'name'] },
+                {
+                    model: User,
+                    as: 'participants',
+                    attributes: ['id', 'name'],
+                    include: [{
+                        model: Role,
+                        as: 'roles',
+                        attributes: ['id', 'name'],
+                        through: { attributes: [] }
+                    }],
+                    through: { attributes: ['role'] }
+                }
+            ]
+        });
+
+        if (!booking) return null;
+
+        const isCreator = booking.createdBy === userId;
+        const isParticipant = booking.participants.some(p => p.id === userId);
+        if (!isCreator && !isParticipant) return null;
+
+        if (isCreator) {
+            const cleanParticipants = booking.participants
+                .filter(p => p.id !== booking.createdBy)
+                .map(p => ({
+                    id: p.id,
+                    name: p.name,
+                    role: p.BookingParticipants?.role || null
+                }));
+
+            return {
+                id: booking.id,
+                bookingTitle: booking.bookingTitle,
+                bookingDesc: booking.bookingDesc,
+                schedulingTime: booking.schedulingTime,
+                status: booking.status,
+                createdBy: booking.createdBy,
+                createdByUser: booking.createdByUser,
+                createdByRole: booking.participants.find(p => p.id === booking.createdBy)?.BookingParticipants?.role || null,
+                createdAt: booking.createdAt,
+                updatedAt: booking.updatedAt,
+                participants: cleanParticipants
+            };
+        }
+
+        if (isParticipant) {
+            const me = booking.participants.find(p => p.id === userId);
+            return {
+                id: booking.id,
+                bookingTitle: booking.bookingTitle,
+                bookingDesc: booking.bookingDesc,
+                schedulingTime: booking.schedulingTime,
+                status: booking.status,
+                createdBy: booking.createdBy,
+                createdByUser: booking.createdByUser,
+                createdAt: booking.createdAt,
+                updatedAt: booking.updatedAt,
+                participants: [{
+                    id: me.id,
+                    name: me.name,
+                    role: me.BookingParticipants?.role || null
+                }]
+            };
+        }
+    }
 };

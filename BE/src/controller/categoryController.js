@@ -1,15 +1,24 @@
 const categoryService = require('../service/categoryService');
 
 module.exports = {
-    getAllCategoriesCtr: async (req, res) => {
+    getAllCategoriesCtrl: async (req, res) => {
         try {
-            const categories = await categoryService.getAllCategoriesSrv();
-            res.status(200).json(categories);
+            const { name, status, page = 1, pageSize = 10 } = req.query;
+
+            const parsedPage = parseInt(page);
+            const parsedPageSize = parseInt(pageSize);
+            const { rows, count } = await categoryService.getAllCategoriesSrv(name, status, parsedPage, parsedPageSize);
+            res.status(200).json({
+                data: rows,
+                total: count,
+                page: parsedPage,
+                pageSize: parsedPageSize
+            });
         } catch (error) {
             res.status(500).json({ message: 'Lỗi server', error: error.message });
         }
     },
-    getCategoryByIdCtr: async (req, res) => {
+    getCategoryByIdCtrl: async (req, res) => {
         try {
             const category = await categoryService.getCategoryByIdSrv(req.params.id);
             res.status(200).json(category);
@@ -20,7 +29,8 @@ module.exports = {
             res.status(500).json({ message: 'Lỗi server', error: error.message });
         }
     },
-    createCategoryCtr: async (req, res) => {
+    createCategoryCtrl: async (req, res) => {
+        console.log(req.body);
         try {
             const category = await categoryService.createCategorySrv(req.body);
             res.status(201).json({
@@ -34,7 +44,7 @@ module.exports = {
             res.status(500).json({ message: 'Lỗi server', error: error.message });
         }
     },
-    updateCategoryCtr: async (req, res) => {
+    updateCategoryCtrl: async (req, res) => {
         try {
             const category = await categoryService.updateCategorySrv(req.params.id, req.body);
             res.status(200).json({
@@ -51,7 +61,7 @@ module.exports = {
             res.status(500).json({ message: 'Lỗi server', error: error.message });
         }
     },
-    deleteCategoryCtr: async (req, res) => {
+    deleteCategoryCtrl: async (req, res) => {
         try {
             const result = await categoryService.deleteCategorySrv(req.params.id);
             res.status(200).json(result);

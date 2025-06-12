@@ -4,7 +4,13 @@ const mapBlogListDTO = (blog) => {
         title: blog.title,
         image: blog.image,
         summary: blog.summary,
-        createdAt: blog.createdAt
+        createdAt: blog.createdAt,
+        category: blog.category ? {
+            id: blog.category.id,
+            name: blog.category.name
+        } : null,
+        status: blog.status,
+        isFeatured: blog.isFeatured
     };
 };
 
@@ -23,7 +29,9 @@ const mapBlogDetailDTO = (blog) => {
         author: blog.author ? {
             id: blog.author.id,
             name: blog.author.name
-        } : null
+        } : null,
+        status: blog.status,
+        isFeatured: blog.isFeatured
     };
 };
 
